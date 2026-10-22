@@ -1,0 +1,28 @@
+[package]
+name = "ng-render"
+description = "neuroglancer-rs rendering on threers: slice views, perspective view, render layers"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+publish.workspace = true
+
+[dependencies]
+threers = { workspace = true, features = ["captions"] }
+ng-core.workspace = true
+wgpu.workspace = true
+bytemuck.workspace = true
+serde_json.workspace = true
+# User shaders: their GLSL read and written out as WGSL. `wgsl-in` too: naga
+# 30's GLSL front end calls into `front::interpolator`, which it compiles only
+# with `spv-in` or `wgsl-in`. Here wgpu usually switches that on, but an
+# embedder with a lean wgpu (WebGPU only) does not, and naga fails to build.
+naga = { version = "30.0.0", features = ["glsl-in", "wgsl-in", "wgsl-out"] }
+
+[dev-dependencies]
+serde_json.workspace = true
+# wgpu's naga with the GLSL writer WebGL2 goes through.
+naga = { version = "30.0.0", features = ["wgsl-in", "glsl-out"] }

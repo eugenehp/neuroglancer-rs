@@ -1,0 +1,1 @@
+{"dataType": "uint16", "dimensions": [10, 8, 20], "blockSize": [16, 16, 8], "compression": {"type": "zstd", "level": 3}, "downsamplingFactors": [4, 4, 1]}

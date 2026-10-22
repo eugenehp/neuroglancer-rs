@@ -1,0 +1,27 @@
+[package]
+name = "ng-kvstore"
+description = "neuroglancer-rs key-value stores: file, HTTP(S), GCS, S3, in-memory"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+publish.workspace = true
+
+[dependencies]
+log.workspace = true
+anyhow.workspace = true
+futures.workspace = true
+flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
+
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+# Blocking HTTP: reads run on worker threads natively.
+ureq = "2"
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen.workspace = true
+wasm-bindgen-futures.workspace = true
+js-sys = "0.3"
+web-sys = { workspace = true, features = ["Window", "WorkerGlobalScope", "Request", "RequestInit", "Response", "Headers", "CacheStorage", "Cache"] }

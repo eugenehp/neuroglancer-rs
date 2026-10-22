@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>neuroglancer-rs</title>
+  <link rel="icon" href="data:,">
+  <style>html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }</style>
+</head>
+<body>
+  <script type="module">
+    import init, { uiTextRects, dataHistogram, isReady } from "./pkg/ng_web.js";
+    // Hooks for scripts (the reference harness), once the module is in.
+    init().then(() => {
+      window.uiTextRects = uiTextRects;
+      window.dataHistogram = dataHistogram;
+      window.isReady = isReady;
+    });
+  </script>
+</body>
+</html>

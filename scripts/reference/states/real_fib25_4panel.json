@@ -1,0 +1,49 @@
+{
+ "dimensions": {
+  "x": [
+   8e-09,
+   "m"
+  ],
+  "y": [
+   8e-09,
+   "m"
+  ],
+  "z": [
+   8e-09,
+   "m"
+  ]
+ },
+ "position": [
+  2914.5,
+  3088.5,
+  4045.5
+ ],
+ "crossSectionScale": 3.76,
+ "projectionOrientation": [
+  -0.0503,
+  0.0566,
+  0.0091,
+  0.9971
+ ],
+ "projectionScale": 4096,
+ "layers": [
+  {
+   "type": "image",
+   "name": "image",
+   "source": "precomputed://gs://neuroglancer-public-data/flyem_fib-25/image"
+  },
+  {
+   "type": "segmentation",
+   "name": "ground-truth",
+   "source": "precomputed://gs://neuroglancer-public-data/flyem_fib-25/ground_truth",
+   "segments": [
+    "158571",
+    "21894",
+    "22060",
+    "24436",
+    "2515"
+   ]
+  }
+ ],
+ "layout": "4panel"
+}

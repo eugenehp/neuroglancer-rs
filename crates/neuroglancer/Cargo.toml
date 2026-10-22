@@ -1,0 +1,82 @@
+[package]
+name = "neuroglancer"
+description = "neuroglancer as a library: its viewer and UI behind one engine, rendering into a wgpu target, with ready-made window (winit) and browser (wasm) hosts"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+publish.workspace = true
+
+[features]
+default = []
+# `neuroglancer::winit`: a desktop window around the engine.
+winit = ["dep:winit", "dep:pollster"]
+# `neuroglancer::web` (wasm32): a page's canvas around the engine.
+web = []
+
+[dependencies]
+ng-core.workspace = true
+ng-kvstore.workspace = true
+ng-chunk.workspace = true
+ng-datasource.workspace = true
+ng-render.workspace = true
+ng-viewer.workspace = true
+ng-ui.workspace = true
+threers = { workspace = true, features = ["ui"] }
+wgpu.workspace = true
+anyhow.workspace = true
+log.workspace = true
+serde_json.workspace = true
+
+winit = { workspace = true, optional = true }
+pollster = { workspace = true, optional = true }
+
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+# `webgl`: wgpu's WebGL2 backend for browsers without WebGPU.
+threers = { workspace = true, features = ["ui", "webgl"] }
+wasm-bindgen.workspace = true
+wasm-bindgen-futures.workspace = true
+futures.workspace = true
+js-sys = "0.3"
+web-sys = { workspace = true, features = [
+    "Window",
+    "Document",
+    "Element",
+    "HtmlElement",
+    "HtmlCanvasElement",
+    "CssStyleDeclaration",
+    "EventTarget",
+    "MouseEvent",
+    "PointerEvent",
+    "WheelEvent",
+    "AddEventListenerOptions",
+    "KeyboardEvent",
+    "Location",
+    "Navigator",
+    "Response",
+    "UrlSearchParams",
+    "Url",
+    "History",
+    "HashChangeEvent",
+    "CanvasRenderingContext2d",
+    "TextMetrics",
+    "ImageData",
+    "Path2d",
+    "HtmlInputElement",
+    "Performance",
+    "CanvasGradient",
+    "Clipboard",
+    "Blob",
+    "BlobPropertyBag",
+    "HtmlAnchorElement",
+    "Worker",
+    "WorkerOptions",
+    "WorkerType",
+    "MessageEvent",
+] }
+
+[dev-dependencies]
+pollster.workspace = true

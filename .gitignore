@@ -1,0 +1,5 @@
+/target
+/crates/ng-web/www/pkg
+/scripts/golden/node_modules
+/scripts/reference/node_modules
+/_site

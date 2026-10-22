@@ -1,0 +1,7 @@
+{
+ "layers": [{ "type": "image", "name": "ome", "source": "zarr://http://127.0.0.1:8792/testdata/datasource/zarr/ome_zarr/simple_0.4/" }],
+ "crossSectionScale": 0.037,
+ "showAxisLines": false,
+ "showScaleBar": false,
+ "layout": "xy"
+}

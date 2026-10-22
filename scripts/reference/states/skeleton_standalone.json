@@ -1,0 +1,53 @@
+{
+ "dimensions": {
+  "x": [
+   1e-09,
+   "m"
+  ],
+  "y": [
+   1e-09,
+   "m"
+  ],
+  "z": [
+   1e-09,
+   "m"
+  ]
+ },
+ "position": [
+  61.5,
+  53.5,
+  421.5
+ ],
+ "crossSectionScale": 0.35,
+ "projectionScale": 600,
+ "projectionOrientation": [
+  0.25,
+  0.2,
+  0.05,
+  0.9460443964212251
+ ],
+ "layers": [
+  {
+   "type": "segmentation",
+   "name": "skel",
+   "source": "precomputed://http://127.0.0.1:8792/data/seg_skeleton/skeletons",
+   "colorSeed": 123,
+   "segments": [
+    "75",
+    "106",
+    "44",
+    "3",
+    "38",
+    "40",
+    "71"
+   ],
+   "skeletonRendering": {
+    "lineWidth2d": 3
+   }
+  }
+ ],
+ "showAxisLines": false,
+ "showScaleBar": false,
+ "crossSectionBackgroundColor": "#203040",
+ "layout": "4panel"
+}

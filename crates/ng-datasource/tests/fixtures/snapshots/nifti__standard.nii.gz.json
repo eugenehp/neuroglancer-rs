@@ -1,0 +1,156 @@
+{
+ "canonicalUrl": "http://localhost:*/datasource/nifti/standard.nii.gz|gzip:|nifti:",
+ "modelTransform": {
+  "inputSpace": {
+   "bounds": {
+    "lowerBounds": [
+     0,
+     0,
+     0
+    ],
+    "upperBounds": [
+     4,
+     5,
+     7
+    ],
+    "voxelCenterAtIntegerCoordinates": [
+     false,
+     false,
+     false
+    ]
+   },
+   "coordinateArrays": [
+    null,
+    null,
+    null
+   ],
+   "names": [
+    "i",
+    "j",
+    "k"
+   ],
+   "scales": [
+    1,
+    3,
+    2
+   ],
+   "units": [
+    "",
+    "",
+    ""
+   ],
+   "valid": true
+  },
+  "outputSpace": {
+   "bounds": {
+    "lowerBounds": [
+     "-Infinity",
+     "-Infinity",
+     "-Infinity"
+    ],
+    "upperBounds": [
+     "Infinity",
+     "Infinity",
+     "Infinity"
+    ],
+    "voxelCenterAtIntegerCoordinates": [
+     false,
+     false,
+     false
+    ]
+   },
+   "coordinateArrays": [
+    null,
+    null,
+    null
+   ],
+   "names": [
+    "x",
+    "y",
+    "z"
+   ],
+   "scales": [
+    1,
+    1,
+    1
+   ],
+   "units": [
+    "",
+    "",
+    ""
+   ],
+   "valid": true
+  }
+ },
+ "subsources": [
+  {
+   "default": true,
+   "id": "default",
+   "subsource": {
+    "volume": {
+     "dataType": "UINT8",
+     "rank": 3,
+     "sources": [
+      [
+       {
+        "chunkSource": {
+         "parameters": {
+          "url": "http://localhost:*/datasource/nifti/standard.nii.gz|gzip:"
+         },
+         "spec": {
+          "baseVoxelOffset": [
+           0,
+           0,
+           0
+          ],
+          "chunkDataSize": [
+           4,
+           5,
+           7
+          ],
+          "compressedSegmentationBlockSize": null,
+          "dataType": "UINT8",
+          "lowerVoxelBound": [
+           0,
+           0,
+           0
+          ],
+          "upperVoxelBound": [
+           4,
+           5,
+           7
+          ]
+         }
+        }
+       }
+      ]
+     ],
+     "volumeType": "UNKNOWN"
+    }
+   }
+  },
+  {
+   "default": true,
+   "id": "bounds",
+   "subsource": {
+    "staticAnnotations": [
+     {
+      "description": "Data Bounds",
+      "id": "data-bounds",
+      "pointA": [
+       0,
+       0,
+       0
+      ],
+      "pointB": [
+       4,
+       5,
+       7
+      ],
+      "type": "axis_aligned_bounding_box"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -1,0 +1,91 @@
+{
+ "dimensions": {
+  "x": [
+   4e-09,
+   "m"
+  ],
+  "y": [
+   4e-09,
+   "m"
+  ],
+  "z": [
+   4e-08,
+   "m"
+  ]
+ },
+ "position": [
+  19.123,
+  14.777,
+  10.61
+ ],
+ "crossSectionScale": 0.3171,
+ "layers": [
+  {
+   "type": "image",
+   "name": "em",
+   "source": "precomputed://http://127.0.0.1:8792/data/image",
+   "opacity": 0.8,
+   "shaderControls": {
+    "normalized": {
+     "range": [
+      50,
+      200
+     ]
+    }
+   }
+  },
+  {
+   "type": "segmentation",
+   "name": "seg",
+   "source": {
+    "url": "precomputed://http://127.0.0.1:8792/data/seg",
+    "transform": {
+     "outputDimensions": {
+      "x": [
+       8e-09,
+       "m"
+      ],
+      "y": [
+       8e-09,
+       "m"
+      ],
+      "z": [
+       8e-08,
+       "m"
+      ]
+     },
+     "matrix": [
+      [
+       1,
+       0,
+       0,
+       2
+      ],
+      [
+       0,
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "colorSeed": 123,
+   "selectedAlpha": 0.6,
+   "segments": [
+    "75",
+    "!82",
+    "106",
+    "44"
+   ]
+  }
+ ],
+ "crossSectionBackgroundColor": "#203040",
+ "layout": "4panel"
+}

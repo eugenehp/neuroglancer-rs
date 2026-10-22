@@ -1,0 +1,1 @@
+{"dataType": "uint16", "dimensions": [20, 15, 20], "blockSize": [16, 16, 8], "compression": {"type": "blosc", "cname": "lz4", "clevel": 5, "shuffle": 1, "blocksize": 0}, "downsamplingFactors": [2, 2, 1]}

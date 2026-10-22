@@ -1,0 +1,40 @@
+{
+ "dimensions": {
+  "x": [
+   8e-09,
+   "m"
+  ],
+  "y": [
+   8e-09,
+   "m"
+  ],
+  "z": [
+   8e-09,
+   "m"
+  ]
+ },
+ "position": [
+  17216.5,
+  19776.5,
+  20704.5
+ ],
+ "crossSectionScale": 4,
+ "projectionScale": 40000,
+ "layers": [
+  {
+   "type": "image",
+   "name": "emdata",
+   "source": "precomputed://gs://neuroglancer-janelia-flyem-hemibrain/emdata/clahe_yz/jpeg"
+  },
+  {
+   "type": "segmentation",
+   "name": "segmentation",
+   "source": "precomputed://gs://neuroglancer-janelia-flyem-hemibrain/v1.2/segmentation",
+   "segments": [
+    "1001453586",
+    "1002360103"
+   ]
+  }
+ ],
+ "layout": "4panel"
+}

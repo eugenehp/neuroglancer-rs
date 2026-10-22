@@ -1,0 +1,50 @@
+[
+ [
+  "{'a':1_'b':[1_2_3]}",
+  "{\"a\":1,\"b\":[1,2,3]}"
+ ],
+ [
+  "{\"a\":\"x,y_z&w\"_'b':'it\\'s'}",
+  "{\"a\":\"x,y_z&w\",\"b\":\"it's\"}"
+ ],
+ [
+  "{'q':'say \"hi\"'}",
+  "{\"q\":\"say \\\"hi\\\"\"}"
+ ],
+ [
+  "{'e':'back\\\\slash'_'n':'\\n'}",
+  "{\"e\":\"back\\\\slash\",\"n\":\"\\n\"}"
+ ],
+ [
+  "{'unterminated:1}",
+  "{'unterminated:1}"
+ ],
+ [
+  "{\"s\":'mixed \"a\" \\'b\\''}",
+  "{\"s\":\"mixed \\\"a\\\" 'b'\"}"
+ ],
+ [
+  "{'layers':[{'source':'precomputed://gs://bucket/path'_'type':'image'_'name':'em'}]_'position':[1.5_2_3]}",
+  "{\"layers\":[{\"source\":\"precomputed://gs://bucket/path\",\"type\":\"image\",\"name\":\"em\"}],\"position\":[1.5,2,3]}"
+ ],
+ [
+  "a&b_c,d",
+  "a,b,c,d"
+ ],
+ [
+  "'only'",
+  "\"only\""
+ ],
+ [
+  "\"dq\"_'sq'",
+  "\"dq\",\"sq\""
+ ],
+ [
+  "{'a':'x\\\ny'}",
+  "{\"a\":'x\\\ny'}"
+ ],
+ [
+  "{'k':'\\\\'}",
+  "{\"k\":\"\\\\\"}"
+ ]
+]

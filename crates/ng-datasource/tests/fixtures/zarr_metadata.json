@@ -1,0 +1,2560 @@
+{
+ "arrays": {
+  "ome_zarr/all_0.6/axis_dependent/mapAxis.zarr/array": {
+   "zarrVersion": 3,
+   "shape": [
+    27,
+    226,
+    186
+   ],
+   "chunkShape": [
+    27,
+    226,
+    186
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    27,
+    226,
+    186
+   ]
+  },
+  "ome_zarr/all_0.6/basic/identity.zarr/array": {
+   "zarrVersion": 3,
+   "shape": [
+    27,
+    226,
+    186
+   ],
+   "chunkShape": [
+    27,
+    226,
+    186
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    27,
+    226,
+    186
+   ]
+  },
+  "ome_zarr/all_0.6/basic/scale.zarr/array": {
+   "zarrVersion": 3,
+   "shape": [
+    27,
+    226,
+    186
+   ],
+   "chunkShape": [
+    27,
+    226,
+    186
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    27,
+    226,
+    186
+   ]
+  },
+  "ome_zarr/all_0.6/basic/sequenceScaleTranslation.zarr/array": {
+   "zarrVersion": 3,
+   "shape": [
+    27,
+    226,
+    186
+   ],
+   "chunkShape": [
+    27,
+    226,
+    186
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    27,
+    226,
+    186
+   ]
+  },
+  "ome_zarr/all_0.6/basic/translation.zarr/array": {
+   "zarrVersion": 3,
+   "shape": [
+    27,
+    226,
+    186
+   ],
+   "chunkShape": [
+    27,
+    226,
+    186
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    27,
+    226,
+    186
+   ]
+  },
+  "ome_zarr/all_0.6/simple/affine.zarr/array": {
+   "zarrVersion": 3,
+   "shape": [
+    27,
+    226,
+    186
+   ],
+   "chunkShape": [
+    27,
+    226,
+    186
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    27,
+    226,
+    186
+   ]
+  },
+  "ome_zarr/all_0.6/simple/anisotropic_rotation.zarr/array": {
+   "zarrVersion": 3,
+   "shape": [
+    27,
+    226,
+    186
+   ],
+   "chunkShape": [
+    27,
+    226,
+    186
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    27,
+    226,
+    186
+   ]
+  },
+  "ome_zarr/all_0.6/simple/rotation.zarr/array": {
+   "zarrVersion": 3,
+   "shape": [
+    27,
+    226,
+    186
+   ],
+   "chunkShape": [
+    27,
+    226,
+    186
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    27,
+    226,
+    186
+   ]
+  },
+  "ome_zarr/simple_0.4/scale0/image": {
+   "zarrVersion": 2,
+   "shape": [
+    10,
+    10
+   ],
+   "chunkShape": [
+    10,
+    10
+   ],
+   "dataType": "UINT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    10,
+    10
+   ]
+  },
+  "ome_zarr/simple_0.4/scale1/image": {
+   "zarrVersion": 2,
+   "shape": [
+    5,
+    5
+   ],
+   "chunkShape": [
+    5,
+    5
+   ],
+   "dataType": "UINT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    5,
+    5
+   ]
+  },
+  "ome_zarr/simple_0.4/scale2/image": {
+   "zarrVersion": 2,
+   "shape": [
+    2,
+    2
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "UINT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    2,
+    2
+   ]
+  },
+  "ome_zarr/simple_0.5/scale0/image": {
+   "zarrVersion": 3,
+   "shape": [
+    10,
+    10
+   ],
+   "chunkShape": [
+    10,
+    10
+   ],
+   "dataType": "UINT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    "y",
+    "x"
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    10,
+    10
+   ]
+  },
+  "ome_zarr/simple_0.5/scale1/image": {
+   "zarrVersion": 3,
+   "shape": [
+    5,
+    5
+   ],
+   "chunkShape": [
+    5,
+    5
+   ],
+   "dataType": "UINT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    "y",
+    "x"
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    5,
+    5
+   ]
+  },
+  "ome_zarr/simple_0.5/scale2/image": {
+   "zarrVersion": 3,
+   "shape": [
+    2,
+    2
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "UINT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    "y",
+    "x"
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    2,
+    2
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.chunked.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    2
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.chunked.ragged.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    5
+   ],
+   "chunkShape": [
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    2
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.S7": {
+   "error": "Error parsing zarr v2 metadata: Error parsing \"dtype\" property: Unsupported numpy data type: \"|S7\""
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.U13.be": {
+   "error": "Error parsing zarr v2 metadata: Error parsing \"dtype\" property: Unsupported numpy data type: \">U13\""
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.U13.le": {
+   "error": "Error parsing zarr v2 metadata: Error parsing \"dtype\" property: Unsupported numpy data type: \"<U13\""
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.U7": {
+   "error": "Error parsing zarr v2 metadata: Error parsing \"dtype\" property: Unsupported numpy data type: \"<U7\""
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.b1": {
+   "error": "Error parsing zarr v2 metadata: Error parsing \"dtype\" property: Unsupported numpy data type: \"|b1\""
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.blosc.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.f4.be": {
+   "zarrVersion": 2,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "FLOAT32",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.f4.le": {
+   "zarrVersion": 2,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "FLOAT32",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.f8": {
+   "error": "Error parsing zarr v2 metadata: Error parsing \"dtype\" property: Unsupported numpy data type: \"<f8\""
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.i4": {
+   "zarrVersion": 2,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT32",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.lz4.i2": {
+   "error": "Error parsing zarr v2 metadata: Error parsing \"compressor\" property: Unsupported compressor: \"lz4\""
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.raw.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.u1": {
+   "zarrVersion": 2,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.zlib.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/1d.contiguous.zstd.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/2d.chunked.U7": {
+   "error": "Error parsing zarr v2 metadata: Error parsing \"dtype\" property: Unsupported numpy data type: \"<U7\""
+  },
+  "zarr_v2/from_zarr-python/data.zarr/2d.chunked.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    2,
+    2
+   ],
+   "chunkShape": [
+    1,
+    1
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    1,
+    1
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/2d.chunked.ragged.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    3,
+    3
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    2,
+    2
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/2d.contiguous.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    2,
+    2
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    2,
+    2
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/3d.chunked.O": {
+   "error": "Error parsing zarr v2 metadata: Error parsing \"dtype\" property: Unsupported numpy data type: \"|O\""
+  },
+  "zarr_v2/from_zarr-python/data.zarr/3d.chunked.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    1,
+    1,
+    1
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    1,
+    1,
+    1
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/3d.chunked.mixed.i2.C": {
+   "zarrVersion": 2,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    3,
+    3,
+    1
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    3,
+    3,
+    1
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/3d.chunked.mixed.i2.F": {
+   "zarrVersion": 2,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    3,
+    3,
+    1
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    2,
+    1,
+    0
+   ],
+   "readChunkShape": [
+    3,
+    3,
+    1
+   ]
+  },
+  "zarr_v2/from_zarr-python/data.zarr/3d.contiguous.i2": {
+   "zarrVersion": 2,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    3,
+    3,
+    3
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": ".",
+   "chunkKeyEncoding": "V2",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    3,
+    3,
+    3
+   ]
+  },
+  "zarr_v3/examples/single_res": {
+   "zarrVersion": 3,
+   "shape": [
+    6,
+    7
+   ],
+   "chunkShape": [
+    4,
+    5
+   ],
+   "dataType": "UINT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    4,
+    5
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.chunked.compressed.sharded.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.chunked.filled.compressed.sharded.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.chunked.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    2
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.chunked.ragged.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    5
+   ],
+   "chunkShape": [
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    2
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.b1": {
+   "error": "Error parsing zarr v3 array metadata: Error parsing \"data_type\" property: Invalid enum value: \"bool\"."
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.blosc.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.compressed.sharded.b1": {
+   "error": "Error parsing zarr v3 array metadata: Error parsing \"data_type\" property: Invalid enum value: \"bool\"."
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.compressed.sharded.f4": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "FLOAT32",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.compressed.sharded.f8": {
+   "error": "Error parsing zarr v3 array metadata: Error parsing \"data_type\" property: Invalid enum value: \"float64\"."
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.compressed.sharded.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.compressed.sharded.i4": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT32",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.compressed.sharded.u1": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.f4.be": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "FLOAT32",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.f4.le": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "FLOAT32",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.f8": {
+   "error": "Error parsing zarr v3 array metadata: Error parsing \"data_type\" property: Invalid enum value: \"float64\"."
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.gzip.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.i4": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT32",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.raw.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/1d.contiguous.u1": {
+   "zarrVersion": 3,
+   "shape": [
+    4
+   ],
+   "chunkShape": [
+    4
+   ],
+   "dataType": "UINT8",
+   "fillValue": 0,
+   "dimensionNames": [
+    null
+   ],
+   "dimensionUnits": [
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0
+   ],
+   "readChunkShape": [
+    4
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/2d.chunked.compressed.sharded.filled.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4,
+    4
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    1,
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/2d.chunked.compressed.sharded.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4,
+    4
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    1,
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/2d.chunked.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    2,
+    2
+   ],
+   "chunkShape": [
+    1,
+    1
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    1,
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/2d.chunked.ragged.compressed.sharded.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    3,
+    3
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    1,
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/2d.chunked.ragged.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    3,
+    3
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    2,
+    2
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/2d.contiguous.compressed.sharded.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    2,
+    2
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    2,
+    2
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/2d.contiguous.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    2,
+    2
+   ],
+   "chunkShape": [
+    2,
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1
+   ],
+   "readChunkShape": [
+    2,
+    2
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/3d.chunked.compressed.sharded.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    4,
+    4,
+    4
+   ],
+   "chunkShape": [
+    2,
+    2,
+    2
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    1,
+    1,
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/3d.chunked.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    1,
+    1,
+    1
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    1,
+    1,
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/3d.chunked.mixed.compressed.sharded.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    3,
+    3,
+    3
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    3,
+    3,
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/3d.chunked.mixed.i2.C": {
+   "zarrVersion": 3,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    3,
+    3,
+    1
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    3,
+    3,
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/3d.chunked.mixed.i2.F": {
+   "zarrVersion": 3,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    3,
+    3,
+    1
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    2,
+    1,
+    0
+   ],
+   "readChunkShape": [
+    3,
+    3,
+    1
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/3d.contiguous.compressed.sharded.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    3,
+    3,
+    3
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    3,
+    3,
+    3
+   ]
+  },
+  "zarr_v3/from_zarrita/data.zarr/3d.contiguous.i2": {
+   "zarrVersion": 3,
+   "shape": [
+    3,
+    3,
+    3
+   ],
+   "chunkShape": [
+    3,
+    3,
+    3
+   ],
+   "dataType": "INT16",
+   "fillValue": 0,
+   "dimensionNames": [
+    null,
+    null,
+    null
+   ],
+   "dimensionUnits": [
+    null,
+    null,
+    null
+   ],
+   "dimensionSeparator": "/",
+   "chunkKeyEncoding": "DEFAULT",
+   "physicalToLogicalDimension": [
+    0,
+    1,
+    2
+   ],
+   "readChunkShape": [
+    3,
+    3,
+    3
+   ]
+  }
+ },
+ "ome": {
+  "ome_zarr/all_0.6/axis_dependent/mapAxis.zarr": {
+   "zarrVersion": 3,
+   "names": [
+    "z",
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m",
+    "m"
+   ],
+   "scales": [
+    0.000001,
+    0.000001,
+    0.000001
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/all_0.6/axis_dependent/mapAxis.zarr/array/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    1,
+    1,
+    1
+   ],
+   "baseTransform": [
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  "ome_zarr/all_0.6/basic/identity.zarr": {
+   "zarrVersion": 3,
+   "names": [
+    "z",
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m",
+    "m"
+   ],
+   "scales": [
+    0.000001,
+    0.000001,
+    0.000001
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/all_0.6/basic/identity.zarr/array/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    1,
+    1,
+    1
+   ],
+   "baseTransform": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  "ome_zarr/all_0.6/basic/scale.zarr": {
+   "zarrVersion": 3,
+   "names": [
+    "z",
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m",
+    "m"
+   ],
+   "scales": [
+    0.000004,
+    0.000003,
+    0.000002
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/all_0.6/basic/scale.zarr/array/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    4,
+    3,
+    2
+   ],
+   "baseTransform": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  "ome_zarr/all_0.6/basic/sequenceScaleTranslation.zarr": {
+   "zarrVersion": 3,
+   "names": [
+    "z",
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m",
+    "m"
+   ],
+   "scales": [
+    0.000004,
+    0.000003,
+    0.000002
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/all_0.6/basic/sequenceScaleTranslation.zarr/array/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    4,
+    3,
+    2
+   ],
+   "baseTransform": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    8,
+    7,
+    5,
+    1
+   ]
+  },
+  "ome_zarr/all_0.6/basic/translation.zarr": {
+   "zarrVersion": 3,
+   "names": [
+    "z",
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m",
+    "m"
+   ],
+   "scales": [
+    0.000001,
+    0.000001,
+    0.000001
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/all_0.6/basic/translation.zarr/array/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    1,
+    1,
+    1
+   ],
+   "baseTransform": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    30,
+    20,
+    10,
+    1
+   ]
+  },
+  "ome_zarr/all_0.6/simple/affine.zarr": {
+   "zarrVersion": 3,
+   "names": [
+    "z",
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m",
+    "m"
+   ],
+   "scales": [
+    0.000004,
+    0.000003,
+    0.000002
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/all_0.6/simple/affine.zarr/array/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    4,
+    3,
+    2
+   ],
+   "baseTransform": [
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    8,
+    7,
+    5,
+    1
+   ]
+  },
+  "ome_zarr/all_0.6/simple/anisotropic_rotation.zarr": {
+   "zarrVersion": 3,
+   "names": [
+    "z",
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m",
+    "m"
+   ],
+   "scales": [
+    0.0000019999808199080306,
+    4.999952049770077e-7,
+    2.5e-7
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/all_0.6/simple/anisotropic_rotation.zarr/array/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    1.999980819908031,
+    0.4999952049770077,
+    0.25
+   ],
+   "baseTransform": [
+    -0.7071067811865476,
+    0.7071067811865476,
+    0,
+    0,
+    -0.7071067811865476,
+    -0.7071067811865476,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  "ome_zarr/all_0.6/simple/rotation.zarr": {
+   "zarrVersion": 3,
+   "names": [
+    "z",
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m",
+    "m"
+   ],
+   "scales": [
+    0.000001,
+    0.000001,
+    0.000001
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/all_0.6/simple/rotation.zarr/array/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    1,
+    1,
+    1
+   ],
+   "baseTransform": [
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    1,
+    0,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  "ome_zarr/simple_0.4": {
+   "zarrVersion": 2,
+   "names": [
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m"
+   ],
+   "scales": [
+    4e-9,
+    3.0000000000000004e-8
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/simple_0.4/scale0/image/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      1
+     ]
+    },
+    {
+     "url": "http://test/ome_zarr/simple_0.4/scale1/image/",
+     "transform": [
+      2,
+      0,
+      0,
+      0,
+      2,
+      0,
+      -0.5,
+      -0.5,
+      1
+     ]
+    },
+    {
+     "url": "http://test/ome_zarr/simple_0.4/scale2/image/",
+     "transform": [
+      4,
+      0,
+      0,
+      0,
+      4,
+      0,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    4,
+    30
+   ],
+   "baseTransform": [
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ]
+  },
+  "ome_zarr/simple_0.5": {
+   "zarrVersion": 3,
+   "names": [
+    "y",
+    "x"
+   ],
+   "units": [
+    "m",
+    "m"
+   ],
+   "scales": [
+    4e-9,
+    3.0000000000000004e-8
+   ],
+   "datasets": [
+    {
+     "url": "http://test/ome_zarr/simple_0.5/scale0/image/",
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      1,
+      0,
+      -0.5,
+      -0.5,
+      1
+     ]
+    },
+    {
+     "url": "http://test/ome_zarr/simple_0.5/scale1/image/",
+     "transform": [
+      2,
+      0,
+      0,
+      0,
+      2,
+      0,
+      -0.5,
+      -0.5,
+      1
+     ]
+    },
+    {
+     "url": "http://test/ome_zarr/simple_0.5/scale2/image/",
+     "transform": [
+      4,
+      0,
+      0,
+      0,
+      4,
+      0,
+      -0.5,
+      -0.5,
+      1
+     ]
+    }
+   ],
+   "baseScales": [
+    4,
+    30
+   ],
+   "baseTransform": [
+    1,
+    0,
+    0,
+    0,
+    1,
+    0,
+    0,
+    0,
+    1
+   ]
+  }
+ }
+}

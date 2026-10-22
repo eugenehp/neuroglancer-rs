@@ -1,0 +1,19 @@
+[package]
+name = "ng-core"
+description = "GPU-free core of neuroglancer-rs: coordinate spaces, navigation state, viewer-state JSON"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+publish.workspace = true
+
+[dependencies]
+anyhow.workspace = true
+# fdlibm-derived sin/cos/tan/log2, as V8 uses for Math.*.
+libm = "0.2"
+# Viewer-state JSON keys are ordered (dimension order comes from key order), so
+# the map must keep insertion order the way JavaScript objects do.
+serde_json = { workspace = true, features = ["preserve_order"] }

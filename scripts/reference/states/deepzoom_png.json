@@ -1,0 +1,29 @@
+{
+ "dimensions": {
+  "x": [
+   1e-09,
+   "m"
+  ],
+  "y": [
+   1e-09,
+   "m"
+  ]
+ },
+ "position": [
+  150.123,
+  100.377
+ ],
+ "crossSectionScale": 0.5031,
+ "layers": [
+  {
+   "type": "image",
+   "name": "dz",
+   "source": "http://127.0.0.1:8792/data/deepzoom/pattern_png.dzi|deepzoom:",
+   "shader": "void main() {\n  emitRGB(vec3(toNormalized(getDataValue(0)), toNormalized(getDataValue(1)), toNormalized(getDataValue(2))));\n}\n"
+  }
+ ],
+ "showAxisLines": false,
+ "showScaleBar": false,
+ "crossSectionBackgroundColor": "#203040",
+ "layout": "xy"
+}

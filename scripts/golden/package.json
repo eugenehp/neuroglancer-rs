@@ -1,0 +1,12 @@
+{
+  "name": "neuroglancer-rs-goldens",
+  "private": true,
+  "description": "Expected values for neuroglancer-rs tests, computed with the libraries neuroglancer itself uses (versions from ../../../neuroglancer/package.json).",
+  "type": "module",
+  "dependencies": {
+    "gl-matrix": "3.1.0",
+    "nifti-reader-js": "0.8.0",
+    "lodash-es": "4.17.21",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,23 @@
+{
+ "layers": [
+  {
+   "type": "image",
+   "name": "ome",
+   "source": "zarr://http://127.0.0.1:8792/testdata/datasource/zarr/ome_zarr/simple_0.4/"
+  }
+ ],
+ "crossSectionScale": 0.0371,
+ "showAxisLines": false,
+ "showScaleBar": false,
+ "layout": "xy",
+ "dimensions": {
+  "y": [
+   4e-09,
+   "m"
+  ],
+  "x": [
+   3e-08,
+   "m"
+  ]
+ }
+}

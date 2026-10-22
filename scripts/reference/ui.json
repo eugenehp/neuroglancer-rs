@@ -1,0 +1,887 @@
+{
+ "page_two_layers_4panel": {
+  "state": "two_layers_4panel",
+  "actions": "",
+  "allowed": 8,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "page_two_layers_xy": {
+  "state": "two_layers_xy",
+  "actions": "",
+  "allowed": 8,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "page_defaults_nifti": {
+  "state": "defaults_nifti",
+  "actions": "",
+  "allowed": 8,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "page_defaults_ome_xy": {
+  "state": "defaults_ome_xy",
+  "actions": "",
+  "allowed": 8,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "page_nifti_rotated_4d": {
+  "state": "nifti_rotated_4d",
+  "actions": "",
+  "allowed": 8,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "page_ome_zarr_2d_dims": {
+  "state": "ome_zarr_2d_dims",
+  "actions": "",
+  "allowed": 8,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "page_axis_lines_4panel": {
+  "state": "axis_lines_4panel",
+  "actions": "",
+  "allowed": 8,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "page_two_layers_4panel_ties": {
+  "state": "two_layers_4panel_ties",
+  "actions": "",
+  "allowed": 178,
+  "note": "the 168 px tie column of the canvas suite, the checkbox corners and 2 px of the position widget's text"
+ },
+ "hover_layer_item": {
+  "state": "two_layers_4panel",
+  "actions": "move:40,34",
+  "allowed": 16,
+  "note": "rounded corners of the close button's hover background"
+ },
+ "archive_layer": {
+  "state": "two_layers_4panel",
+  "actions": "click:47,34",
+  "allowed": 16,
+  "note": "as hover_layer_item"
+ },
+ "hover_panel": {
+  "state": "two_layers_4panel",
+  "actions": "move:300,200",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "hover_layout_button": {
+  "state": "two_layers_4panel",
+  "actions": "move:1163,61",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "maximize_panel": {
+  "state": "two_layers_4panel",
+  "actions": "click:1163,61",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "split_layout": {
+  "state": "two_layers_4panel",
+  "actions": "click:1185,61",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "layout_from_3d": {
+  "state": "two_layers_4panel",
+  "actions": "click:585,438",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "toggle_sections": {
+  "state": "two_layers_4panel",
+  "actions": "click:586,786",
+  "allowed": 24,
+  "note": "the unchecked checkbox's rounded corners"
+ },
+ "wheel_coordinate": {
+  "state": "two_layers_4panel",
+  "actions": "wheel:70,10,100",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "focus_coordinate": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "tool_opacity_active": {
+  "state": "two_layers_tools",
+  "actions": "move:600,300;keydown:Shift;keydown:KeyQ",
+  "allowed": 80,
+  "note": "Shift+Q held: the opacity tool's status, its control at fractional x; the range thumb's circle antialiases differently"
+ },
+ "tool_dimension_active": {
+  "state": "two_layers_tools",
+  "actions": "move:600,300;keydown:Shift;keydown:KeyD",
+  "allowed": 50,
+  "note": "Shift+D held: the dimension tool's status; Chrome's filtering of the 1064px canvas into 1063.5px spreads the position line differently"
+ },
+ "palette_all": {
+  "state": "two_layers_palette",
+  "actions": "move:600,300",
+  "allowed": 1500,
+  "note": "an `All` palette (query `+`): the dimension tools, each layer's controls under its header; the CDF line samples the data on the CPU, the eye icons antialias apart"
+ },
+ "palette_shader_left": {
+  "state": "two_layers_palette_query",
+  "actions": "move:600,300",
+  "allowed": 1300,
+  "note": "a `type:shaderControl` palette docked left; the CDF line samples the data on the CPU"
+ },
+ "palette_list": {
+  "state": "two_layers_palette",
+  "actions": "click:992,10",
+  "allowed": 1500,
+  "note": "the wrench's list: the palette (shown, name, delete), the canned ones not already there; as palette_all beneath"
+ },
+ "rename_dimension_editing": {
+  "state": "two_layers_4panel",
+  "actions": "dblclick:10,10;type:q",
+  "allowed": 6,
+  "note": "the name double-clicked and typed over; as focus_coordinate, the Sections checkbox's corners"
+ },
+ "rename_dimension": {
+  "state": "two_layers_4panel",
+  "actions": "dblclick:10,10;type:q;key:Enter",
+  "allowed": 6,
+  "note": "x renamed q (the layers' transforms after it)"
+ },
+ "rescale_dimension": {
+  "state": "two_layers_4panel",
+  "actions": "dblclick:40,10;type:8nm;key:Enter",
+  "allowed": 400,
+  "note": "x's scale doubled; the seg layer's chunk progress bars (loading again after it) differ by timing"
+ },
+ "layer_drag_over": {
+  "state": "two_layers_4panel",
+  "actions": "mousedown:30,34;move:40,34;move:120,34;move:125,35",
+  "allowed": 400,
+  "note": "em dragged over seg moves after it; the drag's status; Chrome keeps `:hover` where the drag left it (a close button lit), ours follows the pointer"
+ },
+ "layer_drag_drop_zone": {
+  "state": "two_layers_4panel",
+  "actions": "mousedown:30,34;move:40,34;move:300,34;move:400,34",
+  "allowed": 1400,
+  "note": "over the bar's drop zone: what a drop does (its text 0.17 px apart); Chrome keeps `:hover` where the drag left it (a close button lit), ours follows the pointer"
+ },
+ "layer_drag_dropped": {
+  "state": "two_layers_4panel",
+  "actions": "mousedown:30,34;move:40,34;move:120,34;move:125,35;mouseup:125,35",
+  "allowed": 800,
+  "note": "dropped: seg, em, nothing toggled; Chrome keeps `:hover` where the drag left it (a close button lit), ours follows the pointer"
+ },
+ "layer_panel_pinned": {
+  "state": "two_layers_4panel",
+  "actions": "rclick:40,34;click:1138,35",
+  "allowed": 200,
+  "note": "em's panel pinned (blue, the pin lit); as layer_source_tab otherwise"
+ },
+ "layer_panel_pinned_and_selected": {
+  "state": "two_layers_4panel",
+  "actions": "rclick:40,34;click:1138,35;rclick:130,34",
+  "allowed": 700,
+  "note": "seg's (green) under em's pinned panel, with its transform's inferred scales offered; text antialiasing"
+ },
+ "shader_custom": {
+  "state": "two_layers_shader",
+  "actions": "move:600,300",
+  "allowed": 6,
+  "note": "a user shader (invlerp, slider, colour, checkbox; colormapJet) compiled to WGSL; as focus_coordinate, the Sections checkbox's corners"
+ },
+ "shader_custom_tab": {
+  "state": "two_layers_shader",
+  "actions": "click:1066,10;click:990,56",
+  "allowed": 800,
+  "note": "its Rendering tab: the code, each control (the invlerp's legend through the shader); the CDF line samples the data on the CPU"
+ },
+ "shader_overlay": {
+  "state": "two_layers_shader",
+  "actions": "click:1066,10;click:990,56;click:1163,187",
+  "allowed": 800,
+  "note": "the maximised shader editor (80vw by 80vh, 13px, the valid shader's green border); behind it the CDF line samples the data on the CPU, and glyph edges"
+ },
+ "tool_select_idle": {
+  "state": "two_layers_tools",
+  "actions": "move:600,300;keydown:Shift;keydown:KeyE",
+  "allowed": 150,
+  "note": "Shift+E held: the Select tool's status, its header `min-content` (wrapped); its text 0.02 px apart"
+ },
+ "tool_select_drag": {
+  "state": "two_layers_tools",
+  "actions": "move:300,235;keydown:Shift;keydown:KeyE;mousedown:300,235;move:320,235;move:350,215",
+  "allowed": 6,
+  "note": "dragging with the Select tool: the segments passed over starred and shown, the status counting them (ending away from the bounds box, which neuroglancer's picking snaps to)"
+ },
+ "tool_bindings_shown": {
+  "state": "two_layers_tools",
+  "actions": "click:70,10",
+  "allowed": 6,
+  "note": "as focus_coordinate: the Sections checkbox's corners, the controls icon"
+ },
+ "playback_enabled": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10;click:15,165",
+  "allowed": 64,
+  "note": "the \u25b7 in the dimension, \u00b1, the speed and the boundary select; the select's text and chevron antialias differently (Chrome's native select)"
+ },
+ "playback_negated": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10;click:15,165;click:15,183;click:70,183;key:Backspace;key:Backspace;key:Backspace;type:2.5;key:Enter",
+  "allowed": 80,
+  "note": "\u00b1 then a typed speed"
+ },
+ "type_coordinate": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10;key:5",
+  "allowed": 24,
+  "note": "the caret: Playwright hides carets in screenshots (caret: hide), neuroglancer's is a DOM caret, ours is canvas"
+ },
+ "commit_coordinate": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10;key:5;key:Enter",
+  "allowed": 24,
+  "note": "the caret: Playwright hides carets in screenshots (caret: hide), neuroglancer's is a DOM caret, ours is canvas"
+ },
+ "tab_between_coordinates": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10;key:5;key:Tab",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "tab_past_the_last": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10;key:Tab;key:Tab;key:Tab",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "escape_coordinate": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10;key:Escape",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "hover_plot": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10;move:40,90",
+  "allowed": 6,
+  "note": "4 px at the Sections checkbox's corners, 2 px in the controls icon (Chrome's native checkbox and SVG rasterization)"
+ },
+ "click_plot": {
+  "state": "two_layers_4panel",
+  "actions": "click:70,10;click:40,90",
+  "allowed": 30,
+  "note": "the caret: Playwright hides carets in screenshots (caret: hide), neuroglancer's is a DOM caret, ours is canvas; 4 px of neuroglancer's prefetch progress (prefetch is not ported)"
+ },
+ "settings_panel": {
+  "state": "two_layers_4panel",
+  "actions": "click:1186,10",
+  "allowed": 700,
+  "note": "Chrome's native checkboxes (antialiased half-pixel borders, 9 boxes) and colour inputs; one glyph's subpixel position"
+ },
+ "help_panel": {
+  "state": "two_layers_4panel",
+  "actions": "click:1162,10",
+  "allowed": 250,
+  "note": "text glyph positions differing by subpixels in a few words (canvas text vs DOM text)"
+ },
+ "help_and_settings": {
+  "state": "two_layers_4panel",
+  "actions": "click:1162,10;click:1186,10",
+  "allowed": 800,
+  "note": "as settings_panel and help_panel, stacked"
+ },
+ "layers_panel": {
+  "state": "two_layers_4panel",
+  "actions": "click:1018,10",
+  "allowed": 80,
+  "note": "chip antialiasing; Chrome's checkbox"
+ },
+ "selection_panel": {
+  "state": "two_layers_4panel",
+  "actions": "click:1042,10",
+  "allowed": 500,
+  "note": "the pin emoji's rasterization"
+ },
+ "select_position": {
+  "state": "two_layers_4panel",
+  "actions": "move:300,200;move:302,201;ctrlrclick:302,201",
+  "allowed": 8000,
+  "note": "neuroglancer also selects the data-bounds annotation under the pointer and draws it highlighted (annotation picking is not ported); the pin emoji"
+ },
+ "layer_source_tab": {
+  "state": "two_layers_4panel",
+  "actions": "click:1066,10",
+  "allowed": 200,
+  "note": "italic and checkbox-label antialiasing"
+ },
+ "layer_panel_from_bar": {
+  "state": "two_layers_4panel",
+  "actions": "rclick:60,34",
+  "allowed": 200,
+  "note": "right-click on a layer: its side panel, the item bordered green; x=60 is over the bin (from 60.95) as Chrome hit-tests; the Source tab as layer_source_tab"
+ },
+ "layer_rendering_tab": {
+  "state": "two_layers_4panel",
+  "actions": "click:1066,10;click:990,56",
+  "allowed": 750,
+  "note": "the CDF line samples the data on the CPU (neuroglancer's hashed sample points rely on the GPU's sin()); native control antialiasing"
+ },
+ "rendering_opacity_slider": {
+  "state": "two_layers_4panel",
+  "actions": "click:1066,10;click:990,56;click:1060,144",
+  "allowed": 950,
+  "note": "opacity 0.3 from the slider; as layer_rendering_tab"
+ },
+ "rendering_cdf_click": {
+  "state": "two_layers_4panel",
+  "actions": "click:1066,10;click:990,56;click:1150,390",
+  "allowed": 900,
+  "note": "the range's nearer end to 195, the lower bound focused (the row is a <label>); as layer_rendering_tab"
+ },
+ "rendering_type_bound": {
+  "state": "two_layers_4panel",
+  "actions": "click:1066,10;click:990,56;click:1150,390;key:1;key:0;key:0;key:Enter",
+  "allowed": 1350,
+  "note": "range [100, 195] typed; the caret's blink phase; as layer_rendering_tab"
+ },
+ "seg_render_tab": {
+  "state": "two_layers_4panel",
+  "actions": "rclick:110,34;click:980,56",
+  "allowed": 550,
+  "note": "radios, sliders, the render scale histogram, light checkboxes"
+ },
+ "seg_segments_tab": {
+  "state": "two_layers_4panel",
+  "actions": "rclick:110,34;click:1028,56",
+  "allowed": 80,
+  "note": "starred list: star/eye states, the hidden segment's icons off the pointer"
+ },
+ "seg_segment_query": {
+  "state": "two_layers_4panel",
+  "actions": "rclick:110,34;click:1028,56;click:1050,94;key:3;key:Comma;key:7;key:5",
+  "allowed": 200,
+  "note": "an ID query: its list and the starred list sharing the height; the caret's blink phase"
+ },
+ "seg_annotations_tab": {
+  "state": "two_layers_4panel",
+  "actions": "rclick:110,34;click:1090,56",
+  "allowed": 100,
+  "note": "the data bounds in global coordinates"
+ },
+ "image_annotations_tab": {
+  "state": "two_layers_4panel",
+  "actions": "click:1066,10;click:1072,56",
+  "allowed": 100,
+  "note": "as seg_annotations_tab, for the image layer"
+ },
+ "rendering_range_finder": {
+  "state": "two_layers_4panel",
+  "actions": "click:1066,10;click:990,56;click:1157,443",
+  "allowed": 1900,
+  "note": "5-95% gives [10, 244] as in neuroglancer (the CPU-sampled histogram's iteration); the CDF line's sampling noise"
+ },
+ "json_state_editor": {
+  "state": "two_layers_4panel",
+  "actions": "click:1085,10",
+  "allowed": 2900,
+  "note": "the overlay at half pixels (transform), CodeMirror with folds; the fold markers' glow is approximated"
+ },
+ "screenshot_dialog": {
+  "state": "two_layers_4panel",
+  "actions": "click:1108,10",
+  "allowed": 9000,
+  "note": "the framed dialog (settings, preview tables, progress); the long description's antialiasing"
+ },
+ "statistics_panel": {
+  "state": "two_layers_4panel",
+  "actions": "move:600,300;key:Backslash;move:601,300;move:600,300;move:601,300;move:600,300",
+  "allowed": 6000,
+  "mask": [
+   [
+    1030,
+    760,
+    1200,
+    800
+   ]
+  ],
+  "note": "docked at the bottom by `\\\\`, captured once neuroglancer has re-ranked its chunks for the smaller panels (500 ms after the key it still counts the 14 the full-height panels wanted; settled, both count 12). Counts and memory match (raw uint32 segmentation at neuroglancer's compressed-segmentation size, 2636 bytes): 503 px when the latencies print alike. Not pixel-perfect by nature: the download latencies are wall-clock times (masked), and a latency string longer or shorter than neuroglancer's moves the table's columns (~5200 px)"
+ },
+ "add_layer": {
+  "state": "two_layers_4panel",
+  "actions": "click:197,34",
+  "allowed": 1000,
+  "note": "a new layer, its Source tab with the URL focused and the stores' completions; the caret's blink phase"
+ },
+ "add_layer_typed": {
+  "state": "two_layers_4panel",
+  "actions": "click:197,34;type:precomputed://http://127.0.0.1:8792/data/image;key:Enter",
+  "allowed": 700,
+  "note": "named from the URL, the URL made canonical, its subsources unused (struck), Create as \u2026 bars"
+ },
+ "add_layer_created": {
+  "state": "two_layers_4panel",
+  "actions": "click:197,34;type:precomputed://http://127.0.0.1:8792/data/image;key:Enter;click:1060,768",
+  "allowed": 250,
+  "note": "Create as image layer"
+ },
+ "command_palette": {
+  "state": "two_layers_4panel",
+  "actions": "move:600,300;key:Meta+KeyP",
+  "allowed": 2000,
+  "note": "the catalog (layer groups, commands with their bindings, tools); the shortcut symbols' fallback font (the focused panel's white border goes with the keyboard to the palette's input: `:focus-within`)"
+ },
+ "command_palette_search": {
+  "state": "two_layers_4panel",
+  "actions": "move:600,300;key:Meta+KeyP;type:zoom;key:ArrowDown",
+  "allowed": 20,
+  "note": "prefix matches first, the second active (the focused panel's white border goes with the keyboard to the palette's input: `:focus-within`)"
+ },
+ "segment_dblclick_show": {
+  "state": "two_layers_4panel",
+  "actions": "move:300,235;dblclick:300,235;rclick:110,34;click:1028,56",
+  "allowed": 80,
+  "note": "a double-click on segment 71 shows (and stars) it; the list's icons differ as in seg_segments_tab"
+ },
+ "segment_dblclick_hide": {
+  "state": "two_layers_4panel",
+  "actions": "move:300,235;dblclick:300,235;move:301,235;move:300,235;dblclick:300,235;rclick:110,34;click:1028,56",
+  "allowed": 80,
+  "note": "a second double-click hides it, still starred (`!71`); icons as in seg_segments_tab"
+ },
+ "segment_dblclick_unstar": {
+  "state": "two_layers_4panel",
+  "actions": "move:300,235;dblclick:300,235;move:301,235;move:300,235;keydown:Shift;dblclick:300,235;keyup:Shift;rclick:110,34;click:1028,56",
+  "allowed": 80,
+  "note": "Shift+double-click unstars it; icons as in seg_segments_tab"
+ },
+ "segment_entry_hover": {
+  "state": "two_layers_4panel",
+  "actions": "rclick:110,34;click:1028,56;move:990,169",
+  "allowed": 80,
+  "note": "the entry under the pointer is the hovered segment: highlighted in the panels, its entry #222; icons as in seg_segments_tab"
+ },
+ "mesh_4panel": {
+  "state": "mesh_4panel",
+  "actions": "",
+  "allowed": 20,
+  "note": "the same in the 4-panel layout's 3D panel, behind the slices; line antialiasing, checkbox corners, 2 glyph pixels"
+ },
+ "mesh_3d": {
+  "state": "mesh_3d",
+  "actions": "",
+  "allowed": 40,
+  "note": "legacy precomputed meshes of seg_mesh (8 segments, one hidden) in 3D, exact; the data-bounds lines' antialiasing where they cross a mesh and 2 glyph pixels differ"
+ },
+ "mesh_move_to_segment": {
+  "state": "mesh_4panel",
+  "actions": "rclick:110,34;click:1028,56;move:990,169;rclick:990,169;move:1100,700",
+  "allowed": 800,
+  "note": "right-click on segment 106's entry: to its loaded mesh's vertex nearest the position (40, 13.8, 12); neuroglancer then prefetches (the layer items' bottom strips), which this viewer does not; list icons as in seg_segments_tab"
+ },
+ "mesh_move_no_mesh": {
+  "state": "mesh_4panel",
+  "actions": "rclick:110,34;click:1028,56;move:990,151;rclick:990,151;move:1100,700",
+  "allowed": 80,
+  "note": "right-click on hidden segment 82's entry: no mesh loaded: the temporary message, identical; list icons as in seg_segments_tab"
+ },
+ "boundary_position": {
+  "state": "boundary_4panel",
+  "actions": "",
+  "allowed": 60,
+  "note": "the position exactly on the image's upper x bound: the last voxel shows (neuroglancer's closed chunk box and clamp), and the data-bounds face as one rectangle; line antialiasing differs"
+ },
+ "multires_3d": {
+  "state": "multires_3d",
+  "actions": "",
+  "allowed": 40,
+  "note": "multi-resolution (Draco) meshes of seg_multires (two levels of detail); data-bounds line antialiasing and 2 glyph pixels differ"
+ },
+ "multires_far": {
+  "state": "multires_far",
+  "actions": "",
+  "allowed": 20,
+  "note": "the same zoomed out (meshRenderScale 1); line antialiasing and 2 glyph pixels"
+ },
+ "annotations_4panel": {
+  "state": "annotations_4panel",
+  "actions": "",
+  "allowed": 30,
+  "note": "a local annotation layer (points, one off the plane and faded; a line on the plane and one crossing it; a box; an ellipsoid, filled at half alpha in cross-sections; a polyline with its vertex markers) in each panel, and its layer bar colour; line antialiasing, the box's edges where they overlap in 3D"
+ },
+ "annotations_3d": {
+  "state": "annotations_3d",
+  "actions": "",
+  "allowed": 150,
+  "note": "the same in 3D: points and line endpoints as circles, the box's edges and corners, the ellipsoid a lit 10\u00d710 sphere; line antialiasing and overlapping edges at equal depth"
+ },
+ "annotation_layer_panel": {
+  "state": "annotations_4panel",
+  "actions": "rclick:230,34",
+  "allowed": 250,
+  "note": "an annotation layer's Source tab: local://annotations, the identity onto the global dimensions (unbounded), +S (a mutable source rank) and +V; text antialiasing"
+ },
+ "annotation_layer_rendering": {
+  "state": "annotations_4panel",
+  "actions": "rclick:230,34;click:990,56",
+  "allowed": 160,
+  "note": "its Rendering tab: the annotation shader (CodeMirror's 300 px, valid: green), Hide inactive shader controls, Annotation color; panel annotations' antialiasing"
+ },
+ "annotation_layer_list": {
+  "state": "annotations_4panel",
+  "actions": "rclick:230,34;click:1073,56",
+  "allowed": 1200,
+  "note": "the annotation layer's Annotations tab: the related-segment filters, the tools, help, Prev/Next, the header and each annotation's rows (floored coordinates, the type symbol); the toolbox glyphs sit half a pixel apart"
+ },
+ "annotation_layer_schema": {
+  "state": "annotations_4panel",
+  "actions": "rclick:230,34;click:1147,56",
+  "allowed": 120,
+  "note": "the Schema tab without properties: the explanation (wrapped), download/upload/copy/paste, the header (Default value wrapping in its cell), add; panel annotations' antialiasing"
+ },
+ "annotate_point": {
+  "state": "annotations_4panel",
+  "actions": "rclick:230,34;click:1073,56;click:914,116;move:300,200;ctrlclick:300,200;move:600,600",
+  "allowed": 1700,
+  "mask": [
+   [
+    930,
+    482,
+    1200,
+    498
+   ]
+  ],
+  "note": "Ctrl+click with the point tool: the point placed at the pointer, selected (the list's entry, the Selection panel's details), the tool in the top bar; the ID is random (masked); the toolbox's half-pixel offsets as in annotation_layer_list"
+ },
+ "annotate_box": {
+  "state": "annotations_4panel",
+  "actions": "rclick:230,34;click:1073,56;click:938,116;move:280,180;ctrlclick:280,180;move:300,200;move:330,230;ctrlclick:330,230;move:600,600",
+  "allowed": 1700,
+  "note": "the box tool: the first corner, the pointer moving, the second (z one more); selected again at each change (history: back), the list scrolled to it; the ID masked; toolbox offsets as in annotation_layer_list",
+  "mask": [
+   [
+    930,
+    500,
+    1200,
+    516
+   ]
+  ]
+ },
+ "skeleton_4panel": {
+  "state": "skeleton_4panel",
+  "actions": "",
+  "allowed": 20,
+  "note": "precomputed skeletons of seg_skeleton (8 segments, one hidden): lines and points in the cross-sections, lines in 3D; the data-bounds lines' antialiasing and 2 glyph pixels as in mesh_4panel"
+ },
+ "skeleton_3d": {
+  "state": "skeleton_3d",
+  "actions": "",
+  "allowed": 40,
+  "note": "the same skeletons in the 3D layout; the data-bounds lines' antialiasing and 2 glyph pixels as in mesh_3d"
+ },
+ "skeleton_options": {
+  "state": "skeleton_options",
+  "actions": "",
+  "allowed": 20,
+  "note": "skeletonRendering: 2D lines 4 px without points, 3D lines and points 3 px, objectAlpha 0.7 (transparent: order-independent blending); differences as in skeleton_4panel"
+ },
+ "mesh_transparent": {
+  "state": "mesh_transparent",
+  "actions": "",
+  "allowed": 40,
+  "note": "mesh_3d at objectAlpha 0.5: the meshes in the transparent pass, blended order-independently over the slices and lines"
+ },
+ "skeleton_render_tab": {
+  "state": "skeleton_4panel",
+  "actions": "rclick:110,34;click:980,56",
+  "allowed": 950,
+  "note": "a segmentation layer with skeletons: Resolution (mesh) (none drawn), Opacity and Silhouette (3d), the skeleton modes and widths, the vertex attribute, the skeleton shader; radios, slider antialiasing and glyph offsets as in seg_render_tab"
+ },
+ "mesh_render_tab": {
+  "state": "mesh_4panel",
+  "actions": "rclick:110,34;click:980,56",
+  "allowed": 650,
+  "note": "a segmentation layer with meshes: Resolution (mesh) (manifests and fragments at an infinite scale), Opacity (3d), Silhouette (3d); differences as in seg_render_tab"
+ },
+ "skeleton_line_width": {
+  "state": "skeleton_4panel",
+  "actions": "rclick:110,34;click:980,56;click:1100,441;move:600,600",
+  "allowed": 1400,
+  "note": "the 2D line width set to 21 by clicking its slider: thicker lines and points in the cross-sections, each segment's edges then its nodes (neuroglancer's segment order follows its randomly seeded hash set, so overlaps of different segments may differ between runs); the tab as in skeleton_render_tab"
+ },
+ "skeleton_mode_wheel": {
+  "state": "skeleton_4panel",
+  "actions": "rclick:110,34;click:980,56;wheel:1130,419,100;move:600,600",
+  "allowed": 950,
+  "note": "the 2D mode by wheel over its select (EnumSelectWidget's own listener): lines only; the tab as in skeleton_render_tab"
+ },
+ "skeleton_standalone": {
+  "state": "skeleton_standalone",
+  "actions": "",
+  "allowed": 40,
+  "note": "a skeleton directory as a source of its own (neuroglancer_skeletons info): a segmentation layer without a volume, in the default nanometre space"
+ },
+ "skeleton_standalone_source": {
+  "state": "skeleton_standalone",
+  "actions": "rclick:25,34;click:938,56",
+  "allowed": 6500,
+  "note": "its Source tab: the default subsource as skeletons, the identity onto x, y, z in nanometres (unbounded). Known: neuroglancer gives the output scale column 46.5 px here (its 1fr share) where its annotation and volume grids, and this viewer, give 48.98 px, so the grid right of it sits 2 px left in neuroglancer; cause not found"
+ },
+ "multires_sharded": {
+  "state": "multires_sharded",
+  "actions": "",
+  "allowed": 40,
+  "note": "multires_3d with the manifests and fragments in shards (identity hash, 2 shards of 2 minishards): manifests by key, fragments by byte range before them"
+ },
+ "mesh_3d_hover": {
+  "state": "mesh_3d",
+  "actions": "move:720,230",
+  "allowed": 40,
+  "note": "the pointer over a mesh in 3D: picked (the Z and pick buffers read around the pointer): its segment in the layer bar and highlighted, the position on its surface in the top bar"
+ },
+ "mesh_3d_dblclick": {
+  "state": "mesh_3d",
+  "actions": "move:615,330;dblclick:615,330;move:615,331",
+  "allowed": 40,
+  "note": "double-click on a mesh in 3D: its segment hidden"
+ },
+ "annotation_hover_point": {
+  "state": "annotations_4panel",
+  "actions": "move:318,219",
+  "allowed": 30,
+  "note": "the pointer over a point in the xy panel: picked within the pick radius, drawn three quarters of the way to white (the marker borders black); differences as in annotations_4panel"
+ },
+ "annotation_hover_line": {
+  "state": "annotations_4panel",
+  "actions": "move:290,231",
+  "allowed": 70,
+  "note": "the pointer over a line in the xy panel: picked within the pick radius, drawn three quarters of the way to white (the marker borders black); differences as in annotations_4panel"
+ },
+ "annotation_hover_box": {
+  "state": "annotations_4panel",
+  "actions": "move:277,230",
+  "allowed": 80,
+  "note": "the pointer over a box's cross-section edge in the xy panel: picked within the pick radius, drawn three quarters of the way to white (the marker borders black); differences as in annotations_4panel"
+ },
+ "annotation_hover_ellipse": {
+  "state": "annotations_4panel",
+  "actions": "move:330,256",
+  "allowed": 30,
+  "note": "the pointer over an ellipsoid's cross-section in the xy panel: picked within the pick radius, drawn three quarters of the way to white (the marker borders black); differences as in annotations_4panel"
+ },
+ "annotation_select_position": {
+  "state": "annotations_4panel",
+  "actions": "move:318,219;ctrlrclick:318,219;move:600,700",
+  "allowed": 400,
+  "note": "Ctrl+right-click over a point (select-position): the selection pinned with the picked annotation (annotationId, annotationPart) and the position snapped onto it, the Selection panel showing its details; half-pixel glyph and icon offsets as in the other selection scenarios"
+ },
+ "annotation_move": {
+  "state": "annotations_4panel",
+  "actions": "move:318,219;keydown:Alt;mousedown:318,219;move:330,225;move:340,232;mouseup:340,232;keyup:Alt;move:600,700",
+  "allowed": 30,
+  "note": "Alt+drag over a point (move-annotation): it follows the pointer by its representative point (translateDataPointByViewportPixels), in every panel"
+ },
+ "annotation_move_line_end": {
+  "state": "annotations_4panel",
+  "actions": "move:334,266;keydown:Alt;mousedown:334,266;move:345,280;move:355,290;mouseup:355,290;keyup:Alt;move:600,700",
+  "allowed": 40,
+  "note": "Alt+drag of a line's end marker: that endpoint alone moves"
+ },
+ "annotation_delete": {
+  "state": "annotations_4panel",
+  "actions": "move:318,219;keydown:Control;keydown:Alt;rclick:318,219;keyup:Alt;keyup:Control;move:600,700",
+  "allowed": 30,
+  "note": "Ctrl+Alt+right-click over a point (delete-annotation): gone"
+ },
+ "channels_default": {
+  "state": "channels_default",
+  "actions": "",
+  "allowed": 10,
+  "note": "a three-channel precomputed image (c^): the default shader reads channel 0"
+ },
+ "channels_rgb": {
+  "state": "channels_rgb",
+  "actions": "",
+  "allowed": 10,
+  "note": "the channels as red, green and blue (getDataValue(0..2), channels stacked in the chunk texture)"
+ },
+ "channels_invlerp": {
+  "state": "channels_invlerp",
+  "actions": "",
+  "allowed": 10,
+  "note": "an invlerp over channel 1 (#uicontrol invlerp normalized(channel=1))"
+ },
+ "channels_render_tab": {
+  "state": "channels_invlerp",
+  "actions": "rclick:30,34;click:980,56",
+  "allowed": 950,
+  "note": "a multi-channel image's Rendering tab: the channel dimensions (c^ [0, 3)), the invlerp's channel as a position under its label (c^ 1) and no legend; 1-2 px glyph offsets in the bounds and CDF sampling as in layer_rendering_tab"
+ },
+ "channels_hover": {
+  "state": "channels_rgb",
+  "actions": "move:290,200",
+  "allowed": 10,
+  "note": "the pointer over a multi-channel image: every channel's value in the layer bar (96,40,120)"
+ },
+ "channels_type_channel": {
+  "state": "channels_invlerp",
+  "actions": "rclick:30,34;click:980,56;click:946,405;key:Backspace;type:2;key:Enter;move:600,700",
+  "allowed": 1100,
+  "note": "the invlerp's channel typed (2, Enter): the shader reads channel 2 (z), the field keeps the focus with its dropdown (the channel plot); otherwise as channels_render_tab"
+ },
+ "volume_rendering": {
+  "state": "volume_rendering",
+  "actions": "",
+  "allowed": 10,
+  "note": "an image volume-rendered (volumeRendering on, the default shader, 64 depth samples) in the 3D layout"
+ },
+ "volume_rendering_max": {
+  "state": "volume_rendering_max",
+  "actions": "",
+  "allowed": 10,
+  "note": "maximum intensity projection (volumeRendering max): per ray the sample of the greatest invlerp value"
+ },
+ "volume_rendering_4panel": {
+  "state": "volume_rendering_4panel",
+  "actions": "",
+  "allowed": 20,
+  "note": "volume rendering in the 4-panel layout: the rays stop at the slice planes (the Z buffer)"
+ },
+ "volume_rendering_gain": {
+  "state": "volume_rendering_gain",
+  "actions": "",
+  "allowed": 10,
+  "note": "volumeRenderingGain 1.5 (alpha times e^1.5) and 128 depth samples (a finer scale's brightness factor)"
+ },
+ "volume_rendering_tab": {
+  "state": "volume_rendering",
+  "actions": "rclick:30,34;click:980,56",
+  "allowed": 800,
+  "note": "the Rendering tab with volume rendering on: Gain (3D), Resolution (3D) (depth samples, the chosen scale's bar and the others' indicators)"
+ },
+ "precomputed_points": {
+  "state": "precomputed_points",
+  "actions": "",
+  "allowed": 40,
+  "note": "a precomputed point collection (neuroglancer_annotations_v1, two spatial levels) over the image: every cell drawn in full"
+ },
+ "precomputed_points_sparse": {
+  "state": "precomputed_points_sparse",
+  "actions": "",
+  "allowed": 40,
+  "note": "the same with 60 px cross-section and 90 px projection spacing: the coarse level's cell and part of the fine level's (drawFraction) per view"
+ },
+ "precomputed_points_tab": {
+  "state": "precomputed_points",
+  "actions": "rclick:135,34",
+  "allowed": 200,
+  "note": "its Source tab: the default subsource as annotations, the identity onto the collection's x, y, z and bounds (text antialiasing differs by a few pixels)"
+ },
+ "precomputed_points_annotations_tab": {
+  "state": "precomputed_points",
+  "actions": "rclick:135,34;click:1086,56",
+  "allowed": 450,
+  "note": "its Annotations tab: the cross-section and projection spacing widgets (prompt, histogram, legend) above an empty, read-only list without the toolbox or a segments relationship. Known: the histogram canvases (66 px bitmaps over 65.7 and 85.69 px boxes at x 1040.55, 1020.56) are resampled by Chrome with a filter this viewer's fractional boxes only approximate (~350 px)"
+ },
+ "precomputed_points_hover": {
+  "state": "precomputed_points",
+  "actions": "move:889,152",
+  "allowed": 40,
+  "note": "the pointer over a precomputed point in the yz panel: picked, drawn three quarters of the way to white"
+ },
+ "precomputed_points_select": {
+  "state": "precomputed_points",
+  "actions": "move:889,152;ctrlrclick:889,152;move:600,700",
+  "allowed": 400,
+  "note": "Ctrl+right-click over a precomputed point: the selection pinned with the annotation (its decimal id), the position snapped onto it, the Selection panel showing its details and properties"
+ },
+ "precomputed_points_by_id": {
+  "state": "precomputed_points_by_id",
+  "actions": "",
+  "allowed": 400,
+  "note": "a selection in the state of a precomputed point in a cell not drawn at 60/90 px spacing: fetched from the by_id index for the Selection panel (geometry and properties)"
+ },
+ "n5_4panel": {
+  "state": "n5_4panel",
+  "actions": "",
+  "allowed": 20,
+  "note": "an N5 multiscale group (s0 gzip, s1 blosc, s2 zstd; per-scale downsamplingFactors) as an image layer, the finest scale in view"
+ },
+ "n5_coarse": {
+  "state": "n5_coarse",
+  "actions": "",
+  "allowed": 20,
+  "note": "the same zoomed out: coarser scales (blosc, zstd blocks) chosen"
+ },
+ "n5_source_tab": {
+  "state": "n5_4panel",
+  "actions": "rclick:25,34",
+  "allowed": 250,
+  "note": "its Source tab: the canonical URL (|n5:), the default and bounds subsources, x y z in nanometres with the base scale's bounds (text antialiasing differs by a few pixels, as in the other Source tabs)"
+ },
+ "deepzoom_png": {
+  "state": "deepzoom_png",
+  "actions": "",
+  "allowed": 20,
+  "note": "a Deep Zoom image (300 \u00d7 200, 64 px PNG tiles, 1 px overlap) as an RGB image over its c^ channels: neuroglancer's PNG tiles transposed twice (decompressPng makes them planar, the tile source again), reproduced"
+ },
+ "deepzoom_jpg": {
+  "state": "deepzoom_jpg",
+  "actions": "",
+  "allowed": 20,
+  "note": "the same tiled as JPEG"
+ },
+ "deepzoom_coarse": {
+  "state": "deepzoom_coarse",
+  "actions": "",
+  "allowed": 20,
+  "note": "the PNG pyramid zoomed out: coarser levels"
+ },
+ "precomputed_points_shader": {
+  "state": "precomputed_points_shader",
+  "actions": "",
+  "allowed": 60,
+  "note": "an annotation shader over precomputed properties (setColor(prop_color()), setPointMarkerSize(prop_size()), white borders), evaluated per annotation in a compute pass"
+ },
+ "annotations_shader": {
+  "state": "annotations_shader",
+  "actions": "",
+  "allowed": 150,
+  "note": "local annotations under a shader with a colour and a slider control: lines from red to blue 2.5 px wide, endpoint markers 3 and 9 px, box borders 2 px, ellipsoids filled orange at 0.6"
+ },
+ "annotations_shader_controls": {
+  "state": "annotations_shader",
+  "actions": "rclick:230,34;click:990,56",
+  "allowed": 300,
+  "note": "the annotation layer's Rendering tab with the shader's colour and slider controls (width at 2.5)"
+ },
+ "precomputed_points_rendering_tab": {
+  "state": "precomputed_points_shader",
+  "actions": "rclick:135,34;click:990,56",
+  "allowed": 300,
+  "note": "its Rendering tab: the property list (rgb prop_color(), float32 prop_size()) above the shader"
+ },
+ "precomputed_points_sharded": {
+  "state": "precomputed_points_sharded",
+  "actions": "",
+  "allowed": 40,
+  "note": "the same collection with its spatial levels in shards (cells by compressed Morton code)"
+ },
+ "real_fib25_4panel": {
+  "ready": true,
+  "allowed": 0,
+  "note": "fib-25 with legacy meshes in 3D; real data over the network (neuroglancer's public GCS buckets), screenshotted once both viewers are ready"
+ },
+ "real_fib25_xy": {
+  "ready": true,
+  "allowed": 0,
+  "note": "fib-25 JPEG image + compressed_segmentation ground truth; real data over the network (neuroglancer's public GCS buckets), screenshotted once both viewers are ready"
+ },
+ "real_hemibrain_4panel": {
+  "ready": true,
+  "allowed": 0,
+  "note": "hemibrain sharded JPEG + sharded compressed_segmentation, multi-resolution meshes; real data over the network (neuroglancer's public GCS buckets), screenshotted once both viewers are ready"
+ }
+}

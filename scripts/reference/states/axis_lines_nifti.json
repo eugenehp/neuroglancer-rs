@@ -1,0 +1,36 @@
+{
+ "layers": [
+  {
+   "type": "image",
+   "name": "nifti",
+   "source": "nifti://http://127.0.0.1:8792/testdata/datasource/nifti/example_nifti2.nii.gz"
+  }
+ ],
+ "crossSectionScale": 0.137,
+ "showScaleBar": false,
+ "layout": "4panel",
+ "dimensions": {
+  "x": [
+   0.001,
+   "m"
+  ],
+  "y": [
+   0.001,
+   "m"
+  ],
+  "z": [
+   0.001,
+   "m"
+  ],
+  "t": [
+   1,
+   "s"
+  ]
+ },
+ "position": [
+  85.37,
+  -18.23,
+  9.61,
+  2000.5
+ ]
+}

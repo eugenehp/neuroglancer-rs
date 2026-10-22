@@ -1,0 +1,1 @@
+{"@type": "neuroglancer_skeletons", "vertex_attributes": [{"id": "radius", "data_type": "float32", "num_components": 1}]}

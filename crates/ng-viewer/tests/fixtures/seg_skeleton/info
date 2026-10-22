@@ -1,0 +1,1 @@
+{"@type": "neuroglancer_multiscale_volume", "data_type": "uint32", "num_channels": 1, "scales": [{"chunk_sizes": [[8, 8, 4]], "encoding": "raw", "key": "8_8_80", "resolution": [8.0, 8.0, 80.0], "size": [20, 15, 10], "voxel_offset": [0, 0, 0]}], "type": "segmentation", "skeletons": "skeletons"}

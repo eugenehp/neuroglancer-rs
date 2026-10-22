@@ -1,0 +1,293 @@
+{
+ "zoom_without_dimensions": {
+  "state": {
+   "crossSectionScale": 0.037,
+   "projectionScale": 50,
+   "position": [
+    5,
+    5
+   ]
+  },
+  "spaces": [
+   {
+    "names": [
+     "y",
+     "x"
+    ],
+    "scales": [
+     4e-9,
+     3e-8
+    ],
+    "upper": [
+     10,
+     10
+    ]
+   }
+  ],
+  "steps": [
+   {
+    "json": {
+     "dimensions": {
+      "y": [
+       4e-9,
+       "m"
+      ],
+      "x": [
+       3e-8,
+       "m"
+      ]
+     },
+     "position": [
+      5,
+      5
+     ],
+     "crossSectionScale": 9249999.999999998,
+     "projectionScale": 12499999999.999998
+    },
+    "crossSectionScale": 9249999.999999998,
+    "projectionScale": 12499999999.999998,
+    "position": [
+     5,
+     5
+    ]
+   }
+  ]
+ },
+ "zoom_with_dimensions": {
+  "state": {
+   "dimensions": {
+    "y": [
+     4e-9,
+     "m"
+    ],
+    "x": [
+     3e-8,
+     "m"
+    ]
+   },
+   "crossSectionScale": 0.037,
+   "projectionScale": 50
+  },
+  "spaces": [
+   {
+    "names": [
+     "y",
+     "x"
+    ],
+    "scales": [
+     4e-9,
+     3e-8
+    ],
+    "upper": [
+     10,
+     10
+    ]
+   }
+  ],
+  "steps": [
+   {
+    "json": {
+     "dimensions": {
+      "y": [
+       4e-9,
+       "m"
+      ],
+      "x": [
+       3e-8,
+       "m"
+      ]
+     },
+     "position": [
+      5.5,
+      5.5
+     ],
+     "crossSectionScale": 0.037,
+     "projectionScale": 50
+    },
+    "crossSectionScale": 0.037,
+    "projectionScale": 50,
+    "position": [
+     5.5,
+     5.5
+    ]
+   }
+  ]
+ },
+ "dimensions_rescaled_later": {
+  "state": {
+   "dimensions": {
+    "x": [
+     4e-9,
+     "m"
+    ],
+    "y": [
+     4e-9,
+     "m"
+    ],
+    "z": [
+     4e-8,
+     "m"
+    ]
+   },
+   "crossSectionScale": 2
+  },
+  "spaces": [
+   {
+    "names": [
+     "x",
+     "y",
+     "z"
+    ],
+    "scales": [
+     4e-9,
+     4e-9,
+     4e-8
+    ],
+    "upper": [
+     100,
+     100,
+     10
+    ]
+   },
+   {
+    "names": [
+     "x",
+     "y",
+     "z"
+    ],
+    "scales": [
+     8e-9,
+     8e-9,
+     4e-8
+    ],
+    "upper": [
+     50,
+     50,
+     10
+    ]
+   }
+  ],
+  "steps": [
+   {
+    "json": {
+     "dimensions": {
+      "x": [
+       4e-9,
+       "m"
+      ],
+      "y": [
+       4e-9,
+       "m"
+      ],
+      "z": [
+       4e-8,
+       "m"
+      ]
+     },
+     "position": [
+      50.5,
+      50.5,
+      5.5
+     ],
+     "crossSectionScale": 2,
+     "projectionScale": 128
+    },
+    "crossSectionScale": 2,
+    "projectionScale": 128,
+    "position": [
+     50.5,
+     50.5,
+     5.5
+    ]
+   },
+   {
+    "json": {
+     "dimensions": {
+      "x": [
+       8e-9,
+       "m"
+      ],
+      "y": [
+       8e-9,
+       "m"
+      ],
+      "z": [
+       4e-8,
+       "m"
+      ]
+     },
+     "position": [
+      25.25,
+      25.25,
+      5.5
+     ],
+     "crossSectionScale": 1,
+     "projectionScale": 64
+    },
+    "crossSectionScale": 1,
+    "projectionScale": 64,
+    "position": [
+     25.25,
+     25.25,
+     5.5
+    ]
+   }
+  ]
+ },
+ "defaults": {
+  "state": {},
+  "spaces": [
+   {
+    "names": [
+     "x",
+     "y",
+     "z"
+    ],
+    "scales": [
+     4e-9,
+     4e-9,
+     4e-8
+    ],
+    "upper": [
+     100,
+     51,
+     7
+    ]
+   }
+  ],
+  "steps": [
+   {
+    "json": {
+     "dimensions": {
+      "x": [
+       4e-9,
+       "m"
+      ],
+      "y": [
+       4e-9,
+       "m"
+      ],
+      "z": [
+       4e-8,
+       "m"
+      ]
+     },
+     "position": [
+      50.5,
+      25.5,
+      3.5
+     ],
+     "crossSectionScale": 1,
+     "projectionScale": 128
+    },
+    "crossSectionScale": 1,
+    "projectionScale": 128,
+    "position": [
+     50.5,
+     25.5,
+     3.5
+    ]
+   }
+  ]
+ }
+}

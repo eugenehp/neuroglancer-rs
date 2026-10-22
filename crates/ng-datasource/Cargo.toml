@@ -1,0 +1,27 @@
+[package]
+name = "ng-datasource"
+description = "neuroglancer-rs data sources: NIfTI now; precomputed, Zarr and N5 next"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+publish.workspace = true
+
+[dependencies]
+ng-core.workspace = true
+ng-kvstore.workspace = true
+exg-nifti.workspace = true
+exg-zarr.workspace = true
+anyhow.workspace = true
+futures.workspace = true
+serde_json.workspace = true
+# Draco, for multi-resolution meshes.
+threers.workspace = true
+# Sharded precomputed (gzip-encoded indexes and data).
+flate2 = { version = "1", default-features = false, features = ["rust_backend"] }
+# Precomputed PNG chunks; pure Rust, so it builds for wasm too.
+png = "0.17"
+

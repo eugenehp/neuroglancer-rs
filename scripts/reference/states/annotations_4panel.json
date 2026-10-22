@@ -1,0 +1,209 @@
+{
+ "dimensions": {
+  "x": [
+   4e-09,
+   "m"
+  ],
+  "y": [
+   4e-09,
+   "m"
+  ],
+  "z": [
+   4e-08,
+   "m"
+  ]
+ },
+ "position": [
+  19.123,
+  14.777,
+  10.61
+ ],
+ "crossSectionScale": 0.3171,
+ "layers": [
+  {
+   "type": "image",
+   "name": "em",
+   "source": "precomputed://http://127.0.0.1:8792/data/image",
+   "opacity": 0.8,
+   "shaderControls": {
+    "normalized": {
+     "range": [
+      50,
+      200
+     ]
+    }
+   }
+  },
+  {
+   "type": "segmentation",
+   "name": "seg",
+   "source": {
+    "url": "precomputed://http://127.0.0.1:8792/data/seg",
+    "transform": {
+     "outputDimensions": {
+      "x": [
+       8e-09,
+       "m"
+      ],
+      "y": [
+       8e-09,
+       "m"
+      ],
+      "z": [
+       8e-08,
+       "m"
+      ]
+     },
+     "matrix": [
+      [
+       1,
+       0,
+       0,
+       2
+      ],
+      [
+       0,
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   "colorSeed": 123,
+   "selectedAlpha": 0.6,
+   "segments": [
+    "75",
+    "!82",
+    "106",
+    "44"
+   ]
+  },
+  {
+   "type": "annotation",
+   "name": "ann",
+   "source": "local://annotations",
+   "annotations": [
+    {
+     "type": "point",
+     "point": [
+      19,
+      14,
+      10.6
+     ],
+     "id": "p1"
+    },
+    {
+     "type": "point",
+     "point": [
+      25,
+      10,
+      10.6
+     ],
+     "id": "p2"
+    },
+    {
+     "type": "point",
+     "point": [
+      10,
+      20,
+      11.4
+     ],
+     "id": "p3"
+    },
+    {
+     "type": "line",
+     "pointA": [
+      5,
+      5,
+      10.6
+     ],
+     "pointB": [
+      30,
+      25,
+      10.6
+     ],
+     "id": "l1"
+    },
+    {
+     "type": "line",
+     "pointA": [
+      8,
+      25,
+      8
+     ],
+     "pointB": [
+      30,
+      5,
+      13
+     ],
+     "id": "l2"
+    },
+    {
+     "type": "axis_aligned_bounding_box",
+     "pointA": [
+      12,
+      8,
+      9
+     ],
+     "pointB": [
+      22,
+      18,
+      12
+     ],
+     "id": "b1"
+    },
+    {
+     "type": "ellipsoid",
+     "center": [
+      28,
+      22,
+      10
+     ],
+     "radii": [
+      6,
+      4,
+      2
+     ],
+     "id": "e1"
+    },
+    {
+     "type": "polyline",
+     "points": [
+      [
+       6,
+       24,
+       10.6
+      ],
+      [
+       12,
+       27,
+       10.6
+      ],
+      [
+       18,
+       24,
+       10.6
+      ],
+      [
+       24,
+       27,
+       10.6
+      ]
+     ],
+     "id": "pl1"
+    }
+   ]
+  }
+ ],
+ "showAxisLines": false,
+ "showScaleBar": false,
+ "crossSectionBackgroundColor": "#203040",
+ "layout": "4panel"
+}

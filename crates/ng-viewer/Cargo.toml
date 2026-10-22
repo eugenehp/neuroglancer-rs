@@ -1,0 +1,26 @@
+[package]
+name = "ng-viewer"
+description = "neuroglancer-rs viewer: layout, navigation, input and frame drawing, shared by the native and web shells"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+homepage.workspace = true
+publish.workspace = true
+
+[dependencies]
+regex = { version = "1", default-features = false, features = ["std", "unicode-case", "unicode-perl"] }
+ng-chunk.workspace = true
+ng-core.workspace = true
+ng-datasource.workspace = true
+ng-kvstore.workspace = true
+ng-render.workspace = true
+serde_json.workspace = true
+threers.workspace = true
+wgpu.workspace = true
+anyhow.workspace = true
+log.workspace = true
+futures.workspace = true
+png = "0.17"

@@ -1,0 +1,56 @@
+{
+ "dimensions": {
+  "x": [
+   4e-09,
+   "m"
+  ],
+  "y": [
+   4e-09,
+   "m"
+  ],
+  "z": [
+   4e-08,
+   "m"
+  ]
+ },
+ "position": [
+  19.123,
+  14.777,
+  10.61
+ ],
+ "crossSectionScale": 0.3171,
+ "projectionScale": 128,
+ "projectionOrientation": [
+  0.25,
+  0.2,
+  0.05,
+  0.9460443964212251
+ ],
+ "layers": [
+  {
+   "type": "image",
+   "name": "em",
+   "source": "precomputed://http://127.0.0.1:8792/data/image",
+   "opacity": 0.8,
+   "shaderControls": {
+    "normalized": {
+     "range": [
+      50,
+      200
+     ]
+    }
+   }
+  },
+  {
+   "type": "annotation",
+   "name": "pts",
+   "source": "precomputed://http://127.0.0.1:8792/data/annotations_points",
+   "crossSectionAnnotationSpacing": 60,
+   "projectionAnnotationSpacing": 90
+  }
+ ],
+ "showAxisLines": false,
+ "showScaleBar": false,
+ "crossSectionBackgroundColor": "#203040",
+ "layout": "4panel"
+}

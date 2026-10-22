@@ -1,0 +1,24 @@
+{
+ "two_layers_xy": {
+  "allowed": 134,
+  "note": "one voxel-boundary column 0.00025 voxels from pixel centres (float tie)"
+ },
+ "two_layers_4panel": {},
+ "two_layers_4panel_ties": {
+  "allowed": 168,
+  "note": "the tie column of two_layers_xy, in the xy panel (134) and again on its plane in the 3D panel (34)"
+ },
+ "nifti_rotated_4d": {
+  "note": "no dimensions: the zoom is in 1 m canonical voxels (LinkedZoomState), so the data is too small to see"
+ },
+ "ome_zarr_2d": {
+  "note": "as nifti_rotated_4d: no dimensions, zoomed out to nothing"
+ },
+ "nifti_rotated_4d_dims": {},
+ "ome_zarr_2d_dims": {},
+ "axis_lines_4panel": {},
+ "axis_lines_nifti": {},
+ "defaults_4panel": {},
+ "defaults_nifti": {},
+ "defaults_ome_xy": {}
+}

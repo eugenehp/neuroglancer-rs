@@ -1,0 +1,58 @@
+{
+ "u64_64x64x64_b8x8x8": {
+  "size": [
+   64,
+   64,
+   64
+  ],
+  "block": [
+   8,
+   8,
+   8
+  ],
+  "channels": 1,
+  "uint32": false
+ },
+ "u64_13x10x7_b4x3x2": {
+  "size": [
+   13,
+   10,
+   7
+  ],
+  "block": [
+   4,
+   3,
+   2
+  ],
+  "channels": 1,
+  "uint32": false
+ },
+ "u64_9x9x9_b8x8x8_2ch": {
+  "size": [
+   9,
+   9,
+   9
+  ],
+  "block": [
+   8,
+   8,
+   8
+  ],
+  "channels": 2,
+  "uint32": false
+ },
+ "u32_17x11x5_b8x4x2": {
+  "size": [
+   17,
+   11,
+   5
+  ],
+  "block": [
+   8,
+   4,
+   2
+  ],
+  "channels": 1,
+  "uint32": true
+ }
+}

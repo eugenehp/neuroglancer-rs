@@ -1,0 +1,98 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/ng-chunk",
+    "crates/ng-core",
+    "crates/ng-datasource",
+    "crates/ng-kvstore",
+    "crates/ng-render",
+    "crates/ng-viewer",
+    "crates/ng-ui",
+    "crates/ng-native",
+    "crates/ng-web",
+    "crates/neuroglancer",
+]
+
+[workspace.package]
+version = "0.0.1"
+edition = "2021"
+# threers requires 1.87 (wgpu 30).
+rust-version = "1.87"
+license = "MIT OR Apache-2.0"
+authors = ["Eugene Hauptmann"]
+repository = "https://github.com/eugenehp/neuroglancer-rs"
+# The browser viewer, as `.github/workflows/pages.yml` publishes it.
+homepage = "https://eugenehp.github.io/neuroglancer-rs/"
+publish = false
+
+[workspace.dependencies]
+# Rendering engine and file decoders (NIfTI parsing, and Zarr/N5 codecs from
+# `exg_zarr::codec`), from crates.io. To work on threers alongside, add
+# `[patch.crates-io] threers = { path = "../threers" }`; its version must
+# match the requirement here, or cargo quietly ignores the patch.
+threers = { version = "0.0.7", default-features = false }
+exg-nifti = "0.0.1"
+exg-zarr = "0.0.1"
+
+# Must match threers' versions: they share the device, queue and window.
+wgpu = "30"
+winit = "0.29"
+pollster = "0.3"
+
+anyhow = "1"
+bytemuck = { version = "1.16", features = ["derive"] }
+glam = "0.29"
+log = "0.4"
+env_logger = "0.11"
+serde = { version = "1", features = ["derive"] }
+# `float_roundtrip`: parse numbers correctly rounded, as JavaScript does. The
+# default parser can land an ulp off, and viewer state is mostly numbers.
+serde_json = { version = "1", features = ["float_roundtrip"] }
+
+futures = { version = "0.3", default-features = false, features = ["std", "executor", "thread-pool", "async-await"] }
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+console_error_panic_hook = "0.1"
+console_log = "1"
+web-sys = "0.3"
+
+ng-chunk = { path = "crates/ng-chunk" }
+ng-core = { path = "crates/ng-core" }
+ng-datasource = { path = "crates/ng-datasource" }
+ng-kvstore = { path = "crates/ng-kvstore" }
+ng-render = { path = "crates/ng-render" }
+ng-viewer = { path = "crates/ng-viewer" }
+ng-ui = { path = "crates/ng-ui" }
+neuroglancer = { path = "crates/neuroglancer" }
+
+[profile.release-wasm]
+inherits = "release"
+opt-level = "z"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+
+# Optimized even in dev builds (debug info kept): the dependencies (threers,
+# wgpu, naga, the codecs; unoptimized shader compilation alone makes startup
+# take seconds) and this workspace's crates, which every chunk and frame pass
+# through (decoding, shard indexes, the chunk queue, drawing): unoptimized, a
+# dataset over the network takes eight times as long to show (hemibrain:
+# 41 s against 5).
+[profile.dev.package."*"]
+opt-level = 2
+[profile.dev.package.ng-core]
+opt-level = 2
+[profile.dev.package.ng-kvstore]
+opt-level = 2
+[profile.dev.package.ng-chunk]
+opt-level = 2
+[profile.dev.package.ng-datasource]
+opt-level = 2
+[profile.dev.package.ng-render]
+opt-level = 2
+[profile.dev.package.ng-viewer]
+opt-level = 2
+[profile.dev.package.ng-ui]
+opt-level = 2
+[profile.dev.package.neuroglancer]
+opt-level = 2

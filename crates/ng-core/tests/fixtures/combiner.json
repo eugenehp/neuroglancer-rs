@@ -1,0 +1,2709 @@
+{
+ "two_layers_first_wins": {
+  "steps": [
+   {
+    "op": "bind",
+    "layer": "a",
+    "spec": {
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      100,
+      200,
+      30
+     ]
+    }
+   },
+   {
+    "op": "bind",
+    "layer": "b",
+    "spec": {
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      8e-9,
+      8e-9,
+      8e-9
+     ],
+     "lower": [
+      10,
+      0,
+      0
+     ],
+     "upper": [
+      50,
+      50,
+      300
+     ]
+    }
+   },
+   {
+    "op": "unbind",
+    "layer": "a"
+   }
+  ],
+  "results": [
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      100,
+      200,
+      30
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        4e-8
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        100,
+        200,
+        30
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      100,
+      200,
+      60
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        4e-8
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        100,
+        200,
+        30
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     },
+     "b": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        4e-8
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        20,
+        0,
+        0
+       ],
+       "upper": [
+        100,
+        100,
+        60
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      20,
+      0,
+      0
+     ],
+     "upper": [
+      100,
+      100,
+      60
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "b": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        4e-8
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        20,
+        0,
+        0
+       ],
+       "upper": [
+        100,
+        100,
+        60
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   }
+  ]
+ },
+ "state_dimensions_win": {
+  "steps": [
+   {
+    "op": "restore",
+    "dims": {
+     "x": [
+      8e-9,
+      "m"
+     ],
+     "y": [
+      8e-9,
+      "m"
+     ],
+     "z": [
+      8e-9,
+      "m"
+     ]
+    }
+   },
+   {
+    "op": "retain"
+   },
+   {
+    "op": "bind",
+    "layer": "a",
+    "spec": {
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      100,
+      200,
+      30
+     ],
+     "transform": [
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      5,
+      6,
+      7,
+      1
+     ]
+    }
+   },
+   {
+    "op": "release"
+   }
+  ],
+  "results": [
+   {
+    "global": {
+     "valid": false,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      8e-9,
+      8e-9,
+      8e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "upper": [
+      "Infinity",
+      "Infinity",
+      "Infinity"
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {}
+   },
+   {
+    "global": {
+     "valid": false,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      8e-9,
+      8e-9,
+      8e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "upper": [
+      "Infinity",
+      "Infinity",
+      "Infinity"
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {}
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      8e-9,
+      8e-9,
+      8e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      2.5,
+      3,
+      35
+     ],
+     "upper": [
+      52.5,
+      103,
+      185
+     ],
+     "voxelCenter": [
+      true,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       2.5,
+       3,
+       35,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        8e-9,
+        8e-9,
+        8e-9
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        2.5,
+        3,
+        35
+       ],
+       "upper": [
+        52.5,
+        103,
+        185
+       ],
+       "voxelCenter": [
+        true,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      8e-9,
+      8e-9,
+      8e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      2.5,
+      3,
+      35
+     ],
+     "upper": [
+      52.5,
+      103,
+      185
+     ],
+     "voxelCenter": [
+      true,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       2.5,
+       3,
+       35,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        8e-9,
+        8e-9,
+        8e-9
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        2.5,
+        3,
+        35
+       ],
+       "upper": [
+        52.5,
+        103,
+        185
+       ],
+       "voxelCenter": [
+        true,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   }
+  ]
+ },
+ "extra_state_dimension_dropped_after_load": {
+  "steps": [
+   {
+    "op": "restore",
+    "dims": {
+     "x": [
+      0.000001,
+      "m"
+     ],
+     "y": [
+      0.000001,
+      "m"
+     ],
+     "t": [
+      1,
+      "s"
+     ]
+    }
+   },
+   {
+    "op": "retain"
+   },
+   {
+    "op": "bind",
+    "layer": "a",
+    "spec": {
+     "names": [
+      "x",
+      "y"
+     ],
+     "units": [
+      "m",
+      "m"
+     ],
+     "scales": [
+      0.000002,
+      0.000003
+     ],
+     "lower": [
+      0,
+      0
+     ],
+     "upper": [
+      10,
+      10
+     ]
+    }
+   },
+   {
+    "op": "release"
+   }
+  ],
+  "results": [
+   {
+    "global": {
+     "valid": false,
+     "names": [
+      "x",
+      "y",
+      "t"
+     ],
+     "units": [
+      "m",
+      "m",
+      "s"
+     ],
+     "scales": [
+      0.000001,
+      0.000001,
+      1
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "upper": [
+      "Infinity",
+      "Infinity",
+      "Infinity"
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {}
+   },
+   {
+    "global": {
+     "valid": false,
+     "names": [
+      "x",
+      "y",
+      "t"
+     ],
+     "units": [
+      "m",
+      "m",
+      "s"
+     ],
+     "scales": [
+      0.000001,
+      0.000001,
+      1
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "upper": [
+      "Infinity",
+      "Infinity",
+      "Infinity"
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {}
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "t"
+     ],
+     "units": [
+      "m",
+      "m",
+      "s"
+     ],
+     "scales": [
+      0.000001,
+      0.000001,
+      1
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0,
+      "-Infinity"
+     ],
+     "upper": [
+      20,
+      30,
+      "Infinity"
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y"
+       ],
+       "units": [
+        "m",
+        "m"
+       ],
+       "scales": [
+        0.000001,
+        0.000001
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        0,
+        0
+       ],
+       "upper": [
+        20,
+        30
+       ],
+       "voxelCenter": [
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y"
+     ],
+     "units": [
+      "m",
+      "m"
+     ],
+     "scales": [
+      0.000001,
+      0.000001
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0
+     ],
+     "upper": [
+      20,
+      30
+     ],
+     "voxelCenter": [
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y"
+       ],
+       "units": [
+        "m",
+        "m"
+       ],
+       "scales": [
+        0.000001,
+        0.000001
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        0,
+        0
+       ],
+       "upper": [
+        20,
+        30
+       ],
+       "voxelCenter": [
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   }
+  ]
+ },
+ "channel_and_local_dims_excluded": {
+  "steps": [
+   {
+    "op": "bind",
+    "layer": "a",
+    "spec": {
+     "names": [
+      "x",
+      "y",
+      "c^",
+      "t'"
+     ],
+     "units": [
+      "m",
+      "m",
+      "",
+      "s"
+     ],
+     "scales": [
+      1e-9,
+      1e-9,
+      1,
+      0.5
+     ],
+     "lower": [
+      0,
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      64,
+      64,
+      3,
+      10
+     ]
+    }
+   },
+   {
+    "op": "bind",
+    "layer": "b",
+    "spec": {
+     "names": [
+      "y",
+      "x",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      2e-9,
+      3e-9,
+      4e-9
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      8,
+      9,
+      10
+     ]
+    }
+   }
+  ],
+  "results": [
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y"
+     ],
+     "units": [
+      "m",
+      "m"
+     ],
+     "scales": [
+      1e-9,
+      1e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0
+     ],
+     "upper": [
+      64,
+      64
+     ],
+     "voxelCenter": [
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "c^",
+        "t'"
+       ],
+       "units": [
+        "m",
+        "m",
+        "",
+        "s"
+       ],
+       "scales": [
+        1e-9,
+        1e-9,
+        1,
+        0.5
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        64,
+        64,
+        3,
+        10
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      1e-9,
+      1e-9,
+      4e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      64,
+      64,
+      10
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "c^",
+        "t'"
+       ],
+       "units": [
+        "m",
+        "m",
+        "",
+        "s"
+       ],
+       "scales": [
+        1e-9,
+        1e-9,
+        1,
+        0.5
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        0,
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        64,
+        64,
+        3,
+        10
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     },
+     "b": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "y",
+        "x",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        1e-9,
+        1e-9,
+        4e-9
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        16,
+        27,
+        10
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   }
+  ]
+ },
+ "renamed_output_and_rotation": {
+  "steps": [
+   {
+    "op": "bind",
+    "layer": "a",
+    "spec": {
+     "names": [
+      "d0",
+      "d1",
+      "d2"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      1e-9,
+      2e-9,
+      3e-9
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      10,
+      20,
+      30
+     ],
+     "outNames": [
+      "z",
+      "y",
+      "x"
+     ],
+     "outUnits": [
+      "m",
+      "m",
+      "m"
+     ],
+     "outScales": [
+      1e-9,
+      1e-9,
+      1e-9
+     ],
+     "transform": [
+      0,
+      1,
+      0,
+      0,
+      -1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+      100,
+      0,
+      -3,
+      1
+     ]
+    }
+   },
+   {
+    "op": "bind",
+    "layer": "b",
+    "spec": {
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      5e-10,
+      5e-10,
+      5e-10
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      4,
+      4,
+      4
+     ]
+    }
+   }
+  ],
+  "results": [
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "z",
+      "y",
+      "x"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      1e-9,
+      1e-9,
+      1e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      60,
+      0,
+      -3
+     ],
+     "upper": [
+      100,
+      10,
+      87
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       0,
+       1,
+       0,
+       0,
+       -1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       100,
+       0,
+       -3,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "z",
+        "y",
+        "x"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        1e-9,
+        1e-9,
+        1e-9
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        60,
+        0,
+        -3
+       ],
+       "upper": [
+        100,
+        10,
+        87
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "z",
+      "y",
+      "x"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      1e-9,
+      1e-9,
+      1e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0,
+      -3
+     ],
+     "upper": [
+      100,
+      10,
+      87
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       0,
+       1,
+       0,
+       0,
+       -1,
+       0,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       100,
+       0,
+       -3,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "z",
+        "y",
+        "x"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        1e-9,
+        1e-9,
+        1e-9
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        60,
+        0,
+        -3
+       ],
+       "upper": [
+        100,
+        10,
+        87
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     },
+     "b": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        1e-9,
+        1e-9,
+        1e-9
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        2,
+        2,
+        2
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   }
+  ]
+ },
+ "spec_then_rescaled_by_state_dimensions": {
+  "steps": [
+   {
+    "op": "restore",
+    "dims": {
+     "x": [
+      4e-9,
+      "m"
+     ],
+     "y": [
+      4e-9,
+      "m"
+     ],
+     "z": [
+      4e-8,
+      "m"
+     ]
+    }
+   },
+   {
+    "op": "retain"
+   },
+   {
+    "op": "bind",
+    "layer": "seg",
+    "spec": {
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      8e-9,
+      8e-9,
+      8e-8
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      20,
+      15,
+      10
+     ]
+    },
+    "transformSpec": {
+     "outputDimensions": {
+      "x": [
+       8e-9,
+       "m"
+      ],
+      "y": [
+       8e-9,
+       "m"
+      ],
+      "z": [
+       8e-8,
+       "m"
+      ]
+     },
+     "matrix": [
+      [
+       1,
+       0,
+       0,
+       2
+      ],
+      [
+       0,
+       1,
+       0,
+       0
+      ],
+      [
+       0,
+       0,
+       1,
+       0
+      ]
+     ]
+    }
+   },
+   {
+    "op": "release"
+   }
+  ],
+  "results": [
+   {
+    "global": {
+     "valid": false,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "upper": [
+      "Infinity",
+      "Infinity",
+      "Infinity"
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {}
+   },
+   {
+    "global": {
+     "valid": false,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "upper": [
+      "Infinity",
+      "Infinity",
+      "Infinity"
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {}
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      4,
+      0,
+      0
+     ],
+     "upper": [
+      44,
+      30,
+      20
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "seg": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       4,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        4e-8
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        4,
+        0,
+        0
+       ],
+       "upper": [
+        44,
+        30,
+        20
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": {
+       "matrix": [
+        [
+         1,
+         0,
+         0,
+         4
+        ],
+        [
+         0,
+         1,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         1,
+         0
+        ]
+       ],
+       "outputDimensions": {
+        "x": [
+         4e-9,
+         "m"
+        ],
+        "y": [
+         4e-9,
+         "m"
+        ],
+        "z": [
+         4e-8,
+         "m"
+        ]
+       }
+      }
+     }
+    }
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      4,
+      0,
+      0
+     ],
+     "upper": [
+      44,
+      30,
+      20
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "seg": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       4,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        4e-8
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        4,
+        0,
+        0
+       ],
+       "upper": [
+        44,
+        30,
+        20
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": {
+       "matrix": [
+        [
+         1,
+         0,
+         0,
+         4
+        ],
+        [
+         0,
+         1,
+         0,
+         0
+        ],
+        [
+         0,
+         0,
+         1,
+         0
+        ]
+       ],
+       "outputDimensions": {
+        "x": [
+         4e-9,
+         "m"
+        ],
+        "y": [
+         4e-9,
+         "m"
+        ],
+        "z": [
+         4e-8,
+         "m"
+        ]
+       }
+      }
+     }
+    }
+   }
+  ]
+ },
+ "user_edit_with_timestamp": {
+  "steps": [
+   {
+    "op": "bind",
+    "layer": "a",
+    "spec": {
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      100,
+      200,
+      30
+     ]
+    }
+   },
+   {
+    "op": "editGlobal",
+    "dim": 2,
+    "scale": 8e-9,
+    "timestamp": 1000
+   },
+   {
+    "op": "bind",
+    "layer": "b",
+    "spec": {
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      1e-9,
+      1e-9,
+      1e-9
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      10,
+      10,
+      10
+     ]
+    }
+   }
+  ],
+  "results": [
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      4e-8
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      100,
+      200,
+      30
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        4e-8
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        "-Infinity"
+       ],
+       "lower": [
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        100,
+        200,
+        30
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      8e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      100,
+      200,
+      150
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        8e-9
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        1000
+       ],
+       "lower": [
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        100,
+        200,
+        150
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   },
+   {
+    "global": {
+     "valid": true,
+     "names": [
+      "x",
+      "y",
+      "z"
+     ],
+     "units": [
+      "m",
+      "m",
+      "m"
+     ],
+     "scales": [
+      4e-9,
+      4e-9,
+      8e-9
+     ],
+     "timestamps": [
+      "-Infinity",
+      "-Infinity",
+      "-Infinity"
+     ],
+     "lower": [
+      0,
+      0,
+      0
+     ],
+     "upper": [
+      100,
+      200,
+      150
+     ],
+     "voxelCenter": [
+      false,
+      false,
+      false
+     ]
+    },
+    "layers": {
+     "a": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        8e-9
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        1000
+       ],
+       "lower": [
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        100,
+        200,
+        150
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     },
+     "b": {
+      "transform": [
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1,
+       0,
+       0,
+       0,
+       0,
+       1
+      ],
+      "output": {
+       "valid": true,
+       "names": [
+        "x",
+        "y",
+        "z"
+       ],
+       "units": [
+        "m",
+        "m",
+        "m"
+       ],
+       "scales": [
+        4e-9,
+        4e-9,
+        8e-9
+       ],
+       "timestamps": [
+        "-Infinity",
+        "-Infinity",
+        1000
+       ],
+       "lower": [
+        0,
+        0,
+        0
+       ],
+       "upper": [
+        2.5,
+        2.5,
+        1.25
+       ],
+       "voxelCenter": [
+        false,
+        false,
+        false
+       ]
+      },
+      "json": null
+     }
+    }
+   }
+  ]
+ }
+}
