@@ -29,6 +29,16 @@ pub struct DataSourceUrl {
     /// The kvstore URL.
     pub kvstore: String,
     pub format: Option<Format>,
+    /// `zarr2://` / `zarr3://` name the Zarr version: only its metadata is read.
+    pub zarr_version: Option<u8>,
+}
+
+fn zarr_version(scheme: &str) -> Option<u8> {
+    match scheme {
+        "zarr2" => Some(2),
+        "zarr3" => Some(3),
+        _ => None,
+    }
 }
 
 fn format_scheme(s: &str) -> Option<Format> {
@@ -50,11 +60,11 @@ pub fn parse(url: &str) -> Result<DataSourceUrl> {
         let parts: Vec<&str> = url.split('|').collect();
         let scheme = |part: &str| part.split(':').next().unwrap_or(part).to_owned();
         let format_at = (1..parts.len()).rev().find(|&i| format_scheme(&scheme(parts[i])).is_some());
-        let (kvstore, format) = match format_at {
-            Some(i) => (parts[..i].join("|"), format_scheme(&scheme(parts[i]))),
-            None => (url.to_owned(), None),
+        let (kvstore, format, version) = match format_at {
+            Some(i) => (parts[..i].join("|"), format_scheme(&scheme(parts[i])), zarr_version(&scheme(parts[i]))),
+            None => (url.to_owned(), None, None),
         };
-        return Ok(DataSourceUrl { kvstore, format });
+        return Ok(DataSourceUrl { kvstore, format, zarr_version: version });
     }
     // Legacy form.
     if let Some((scheme, rest)) = url.split_once("://") {
@@ -62,12 +72,14 @@ pub fn parse(url: &str) -> Result<DataSourceUrl> {
             return Ok(DataSourceUrl {
                 kvstore: rest.to_owned(),
                 format: Some(format),
+                zarr_version: zarr_version(scheme),
             });
         }
     }
     Ok(DataSourceUrl {
         kvstore: url.to_owned(),
         format: None,
+        zarr_version: None,
     })
 }
 
@@ -117,7 +129,7 @@ pub async fn get(url: &str) -> Result<DataSource> {
             crate::nifti::get(&loc, &shown).await
         }
         Format::Precomputed => crate::precomputed::get(&loc).await,
-        Format::Zarr => crate::zarr::get(&loc).await,
+        Format::Zarr => crate::zarr::get_version(&loc, parsed.zarr_version).await,
         Format::N5 => crate::n5::get(&loc).await,
         Format::DeepZoom => crate::deepzoom::get(&loc).await,
     }
@@ -132,13 +144,7 @@ pub fn local_annotations() -> DataSource {
     let empty = std::sync::Arc::new(ng_core::CoordinateSpace::new(true, vec![], vec![], vec![]));
     DataSource {
         canonical_url: LOCAL_ANNOTATIONS.into(),
-        model_transform: crate::model::CoordinateSpaceTransform {
-            rank: 0,
-            source_rank: 0,
-            input_space: empty.clone(),
-            output_space: empty,
-            transform: vec![1.0],
-        },
+        model_transform: crate::model::CoordinateSpaceTransform::identity(empty),
         subsources: vec![crate::model::SubsourceEntry { id: "default".into(), default: true, subsource: crate::model::Subsource::LocalAnnotations }],
     }
 }
@@ -179,6 +185,14 @@ async fn detect(url: &str, loc: &KvStoreLocation) -> Result<Format> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn zarr_scheme_names_the_version() {
+        assert_eq!(parse("zarr3://https://h/a").unwrap().zarr_version, Some(3));
+        assert_eq!(parse("zarr2://https://h/a").unwrap().zarr_version, Some(2));
+        assert_eq!(parse("zarr://https://h/a").unwrap().zarr_version, None);
+        assert_eq!(parse("https://h/a|zarr3:").unwrap().zarr_version, Some(3));
+    }
 
     #[test]
     fn url_forms() {

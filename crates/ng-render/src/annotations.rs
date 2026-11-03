@@ -297,9 +297,17 @@ pub fn clip_to_depth_range(a: [f64; 4], b: [f64; 4]) -> Option<([f64; 4], [f64; 
     Some((mix(tmin), mix(tmax)))
 }
 
-/// `emitLine`: the quad in device coordinates, y mirrored, depth
-/// `(z + 1) / 2`.
-fn line_quad(l: &Line, width: f64, height: f64, fade: f32) -> Option<[LineVertex; 6]> {
+/// A corner of a line's quad: device position (y mirrored, depth
+/// `(z + 1) / 2`), across-line coordinate (−1 to 1), and colour.
+pub(crate) struct LineCorner {
+    pub position: [f32; 3],
+    pub line_coord: f32,
+    pub color: [f32; 4],
+}
+
+/// `emitLine`: the quad's two triangles, and the feather's fraction of its
+/// width; `None` if it has no width or is clipped away.
+pub(crate) fn line_corners(l: &Line, width: f64, height: f64) -> Option<([LineCorner; 6], f32)> {
     let total = if l.width == 0.0 { 0.0 } else { l.width + 2.0 * l.feather };
     if total == 0.0 {
         return None;
@@ -325,14 +333,20 @@ fn line_quad(l: &Line, width: f64, height: f64, fade: f32) -> Option<[LineVertex
     let nl = (n[0] * n[0] + n[1] * n[1]).sqrt();
     let n = [n[0] / nl, n[1] / nl];
     let feather_fraction = (l.feather.max(1e-6) / total) as f32;
-    let vertex = |x: f64, y: f64| {
+    let corner = |x: f64, y: f64| {
         let p = [da[0] + (db[0] - da[0]) * x, da[1] + (db[1] - da[1]) * x, da[2] + (db[2] - da[2]) * x];
         let px = p[0] + y * n[0] * total * params[0];
         let py = p[1] + y * n[1] * total * params[1];
-        LineVertex { position: [px as f32, -py as f32, ((p[2] + 1.0) / 2.0) as f32], line_coord: y as f32, feather_fraction, fade, color: color_at(x) }
+        LineCorner { position: [px as f32, -py as f32, ((p[2] + 1.0) / 2.0) as f32], line_coord: y as f32, color: color_at(x) }
     };
-    let (v00, v10, v01, v11) = (vertex(0.0, -1.0), vertex(1.0, -1.0), vertex(0.0, 1.0), vertex(1.0, 1.0));
-    Some([v00, v10, v11, v00, v11, v01])
+    let quad = [(0.0, -1.0), (1.0, -1.0), (1.0, 1.0), (0.0, -1.0), (1.0, 1.0), (0.0, 1.0)];
+    Some((quad.map(|(x, y)| corner(x, y)), feather_fraction))
+}
+
+/// [`line_corners`] as the annotation line shader's vertices.
+fn line_quad(l: &Line, width: f64, height: f64, fade: f32) -> Option<[LineVertex; 6]> {
+    let (corners, feather_fraction) = line_corners(l, width, height)?;
+    Some(corners.map(|c| LineVertex { position: c.position, line_coord: c.line_coord, feather_fraction, fade, color: c.color }))
 }
 
 /// An ellipse's quad through the circle shader: no border, a vanishing

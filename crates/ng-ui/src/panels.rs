@@ -753,7 +753,7 @@ impl Selection {
     pub(crate) fn store(&self, viewer: &mut Viewer) {
         let mut o = viewer.ui_state("selection").and_then(serde_json::Value::as_object).cloned().unwrap_or_default();
         if let Some(p) = &self.position {
-            o.insert("position".into(), serde_json::Value::Array(p.iter().map(|v| ng_core::js::number(*v as f64)).collect()));
+            o.insert("position".into(), ng_core::js::numbers(p));
         }
         let mut layers = serde_json::Map::new();
         for (name, value) in &self.layers {

@@ -13,7 +13,12 @@ use std::collections::HashMap;
 use std::hash::Hash;
 use std::sync::{Arc, Mutex};
 
+use futures::future::{AbortHandle, Abortable};
+
 use ng_kvstore::MaybeSendSync;
+
+mod adaptive;
+pub use adaptive::Adaptive;
 
 /// A value loading in the background, as the executor runs it.
 #[cfg(not(target_arch = "wasm32"))]
@@ -92,10 +97,15 @@ struct Entry<V> {
     bytes: usize,
     /// How long its download took (ms), once done, if a clock is set.
     latency: Option<f64>,
+    /// While downloading: stops it (and its HTTP request) when unwanted.
+    abort: Option<AbortHandle>,
+    /// Which download this entry waits on: a result from one aborted or
+    /// superseded since is not this entry's.
+    download: u64,
 }
 
-/// Results handed back by finished tasks.
-type Inbox<K, V> = Arc<Mutex<Vec<(K, anyhow::Result<(V, usize)>, Option<f64>)>>>;
+/// Results handed back by finished tasks, with the download they came from.
+type Inbox<K, V> = Arc<Mutex<Vec<(K, u64, anyhow::Result<(V, usize)>, Option<f64>)>>>;
 
 pub struct ChunkManager<K, V> {
     entries: HashMap<K, Entry<V>>,
@@ -105,6 +115,8 @@ pub struct ChunkManager<K, V> {
     wake: Arc<dyn Fn() + Send + Sync>,
     frame: u64,
     in_flight: usize,
+    /// Numbers each download started.
+    downloads: u64,
     pub max_concurrent_downloads: usize,
     /// Bytes of ready chunks to keep (`systemMemoryLimit`).
     pub memory_budget: usize,
@@ -112,6 +124,26 @@ pub struct ChunkManager<K, V> {
     /// Milliseconds from some origin (`performance.now()`), to time
     /// downloads by.
     pub clock: Option<fn() -> f64>,
+    /// Running totals of the downloads (`DownloadStats`).
+    pub stats: DownloadStats,
+    /// Counts changes to what is held: a chunk ready or failed, a ready one
+    /// evicted or dropped. A host that builds from the held values (a batch
+    /// of skeletons) rebuilds only as it moves.
+    revision: u64,
+}
+
+/// Downloads finished since the manager was made, for a host that tunes
+/// `max_concurrent_downloads` by what it measures: counts, bytes, summed
+/// latency (when a clock is set), and how many were left waiting for a slot
+/// at the end of the last frame.
+#[derive(Debug, Clone, Copy, Default)]
+pub struct DownloadStats {
+    pub done: u64,
+    pub failed: u64,
+    pub bytes: u64,
+    pub latency_ms: f64,
+    pub timed: u64,
+    pub waiting: usize,
 }
 
 /// What a load returns: the value and its size in bytes.
@@ -130,11 +162,14 @@ where
             wake,
             frame: 0,
             in_flight: 0,
+            downloads: 0,
             // neuroglancer's defaults: `concurrentDownloads` 100, 2 GB system memory.
             max_concurrent_downloads: 100,
             memory_budget: 2_000_000_000,
             memory_used: 0,
             clock: None,
+            stats: DownloadStats::default(),
+            revision: 0,
         }
     }
 
@@ -171,6 +206,8 @@ where
             last_used: frame,
             bytes: 0,
             latency: None,
+            abort: None,
+            download: 0,
         });
         e.priority = Some(e.priority.map_or(priority, |p| p.max(priority)));
         e.last_used = frame;
@@ -201,18 +238,34 @@ where
     /// Takes in finished loads. Returns whether any arrived.
     pub fn poll(&mut self) -> bool {
         let done: Vec<_> = std::mem::take(&mut *self.inbox.lock().unwrap());
-        let any = !done.is_empty();
-        for (key, result, latency) in done {
-            self.in_flight -= 1;
+        let mut any = false;
+        for (key, download, result, latency) in done {
+            // a cancelled download was counted off when it was cancelled
             let Some(e) = self.entries.get_mut(&key) else { continue };
+            if !matches!(e.state, State::Downloading) || e.download != download {
+                continue;
+            }
+            self.in_flight -= 1;
+            any = true;
+            self.revision += 1;
+            e.abort = None;
             e.latency = latency;
+            if let Some(ms) = latency {
+                self.stats.latency_ms += ms;
+                self.stats.timed += 1;
+            }
             match result {
                 Ok((value, bytes)) => {
                     e.state = State::Ready(Arc::new(value));
                     e.bytes = bytes;
                     self.memory_used += bytes;
+                    self.stats.done += 1;
+                    self.stats.bytes += bytes as u64;
                 }
-                Err(err) => e.state = State::Failed(format!("{err:#}").into()),
+                Err(err) => {
+                    e.state = State::Failed(format!("{err:#}").into());
+                    self.stats.failed += 1;
+                }
             }
         }
         any
@@ -233,24 +286,35 @@ where
             .map(|(k, e)| (k.clone(), e.priority.unwrap_or(f64::NEG_INFINITY)))
             .collect();
         queued.sort_by(|a, b| b.1.total_cmp(&a.1));
+        let wanted = queued.len();
+        let mut started = 0;
         for (key, _) in queued {
             if self.in_flight >= self.max_concurrent_downloads {
                 break;
             }
-            self.entries.get_mut(&key).unwrap().state = State::Downloading;
+            started += 1;
+            self.downloads += 1;
+            let download = self.downloads;
+            let (abort, registration) = AbortHandle::new_pair();
+            let e = self.entries.get_mut(&key).unwrap();
+            e.state = State::Downloading;
+            e.abort = Some(abort);
+            e.download = download;
             self.in_flight += 1;
-            let future = load(&key);
+            let future = Abortable::new(load(&key), registration);
             let inbox = self.inbox.clone();
             let wake = self.wake.clone();
             let clock = self.clock;
             let start = clock.map(|c| c());
             self.executor.spawn(Box::pin(async move {
-                let result = future.await;
+                // aborted: the future (and the request under it) is dropped
+                let Ok(result) = future.await else { return };
                 let latency = clock.zip(start).map(|(c, t)| c() - t);
-                inbox.lock().unwrap().push((key, result, latency));
+                inbox.lock().unwrap().push((key, download, result, latency));
                 wake();
             }));
         }
+        self.stats.waiting = wanted - started;
         self.evict();
     }
 
@@ -272,7 +336,38 @@ where
             }
             self.entries.remove(&key);
             self.memory_used -= bytes;
+            self.revision += 1;
         }
+    }
+
+    /// Forgets every chunk whose key fails `keep` — those of a layer that is
+    /// gone (a source switched away): downloads still running are cancelled,
+    /// their HTTP requests with them, so the slots go to what is wanted now
+    /// instead of the new source queueing behind the old one's backlog; ready
+    /// data is freed. Returns how many downloads were cancelled.
+    pub fn retain_keys(&mut self, mut keep: impl FnMut(&K) -> bool) -> usize {
+        let (mut cancelled, mut freed, mut dropped) = (0, 0, 0);
+        self.entries.retain(|k, e| {
+            if keep(k) {
+                return true;
+            }
+            if let Some(a) = e.abort.take() {
+                a.abort();
+            }
+            match e.state {
+                State::Downloading => cancelled += 1,
+                State::Ready(_) => freed += e.bytes,
+                _ => {}
+            }
+            dropped += 1;
+            false
+        });
+        if dropped > 0 {
+            self.revision += 1;
+        }
+        self.in_flight -= cancelled;
+        self.memory_used -= freed;
+        cancelled
     }
 
     /// Loads still running.
@@ -282,6 +377,37 @@ where
 
     pub fn memory_used(&self) -> usize {
         self.memory_used
+    }
+
+    /// Swaps `key`'s ready value for `value` (`bytes` in memory): a smaller
+    /// form of it, once what it was loaded for holds the rest elsewhere.
+    /// False (and nothing changed) unless `key` is ready.
+    pub fn replace(&mut self, key: &K, value: Arc<V>, bytes: usize) -> bool {
+        let Some(e) = self.entries.get_mut(key) else { return false };
+        if !matches!(e.state, State::Ready(_)) {
+            return false;
+        }
+        e.state = State::Ready(value);
+        self.memory_used = self.memory_used - e.bytes + bytes;
+        e.bytes = bytes;
+        true
+    }
+
+    /// Changes with what is held (see the field): equal values, the same
+    /// ready set as before.
+    pub fn revision(&self) -> u64 {
+        self.revision
+    }
+}
+
+impl<K, V> Drop for ChunkManager<K, V> {
+    /// A manager going away (its source closed) stops its downloads.
+    fn drop(&mut self) {
+        for e in self.entries.values_mut() {
+            if let Some(a) = e.abort.take() {
+                a.abort();
+            }
+        }
     }
 }
 
@@ -358,6 +484,49 @@ mod tests {
     }
 
     #[test]
+    fn a_ready_value_is_replaced_with_its_size() {
+        let (mut m, _) = manager(1000, 10);
+        assert!(!m.replace(&1, Arc::new(vec![]), 0), "not loaded yet");
+        m.begin_frame();
+        m.request(&1, 0.0);
+        m.end_frame(load);
+        m.poll();
+        assert_eq!(m.memory_used(), 10);
+        assert!(m.replace(&1, Arc::new(vec![9]), 1));
+        assert_eq!((m.memory_used(), m.get(&1).unwrap().as_slice()), (1, &[9u8][..]));
+    }
+
+    #[test]
+    fn revision_moves_with_what_is_held() {
+        let (mut m, _) = manager(15, 10);
+        let r0 = m.revision();
+        m.begin_frame();
+        m.request(&1, 0.0);
+        m.end_frame(load);
+        assert_eq!(m.revision(), r0, "downloading changes nothing held");
+        m.poll();
+        let r1 = m.revision();
+        assert!(r1 > r0, "a chunk arrived");
+        m.begin_frame();
+        m.request(&1, 0.0);
+        m.end_frame(load);
+        m.poll();
+        assert_eq!(m.revision(), r1, "asked again, nothing new");
+        // a second chunk over the budget evicts the first
+        m.begin_frame();
+        m.request(&2, 0.0);
+        m.end_frame(load);
+        m.poll();
+        let r2 = m.revision();
+        m.begin_frame();
+        m.end_frame(load);
+        assert!(m.get(&1).is_none() && m.revision() > r2, "evicted");
+        let r3 = m.revision();
+        m.retain_keys(|_| false);
+        assert!(m.revision() > r3, "dropped");
+    }
+
+    #[test]
     fn unrequested_queue_entries_are_dropped_and_lru_evicted_over_budget() {
         let (mut m, _) = manager(25, 10);
         m.begin_frame();
@@ -384,5 +553,71 @@ mod tests {
         m.poll();
         m.begin_frame();
         assert!(matches!(m.request(&7, 0.0), State::Failed(e) if e.contains("boom")));
+    }
+
+    /// Holds tasks until told to run them: downloads that stay in flight.
+    #[derive(Default)]
+    struct Held(Mutex<Vec<Task>>);
+    impl Executor for Held {
+        fn spawn(&self, task: Task) {
+            self.0.lock().unwrap().push(task);
+        }
+    }
+
+    #[test]
+    fn a_dropped_layers_downloads_are_cancelled_and_free_their_slots() {
+        let held = Arc::new(Held::default());
+        let mut m: ChunkManager<u32, Vec<u8>> = ChunkManager::new(held.clone(), Arc::new(|| {}));
+        m.max_concurrent_downloads = 2;
+        let dropped = Arc::new(AtomicUsize::new(0));
+        // a load that never finishes and counts being dropped (its request aborted)
+        struct OnDrop(Arc<AtomicUsize>);
+        impl Drop for OnDrop {
+            fn drop(&mut self) {
+                self.0.fetch_add(1, Ordering::SeqCst);
+            }
+        }
+        let slow = |d: Arc<AtomicUsize>| {
+            move |_: &u32| -> LoadFuture<Loaded<Vec<u8>>> {
+                let g = OnDrop(d.clone());
+                Box::pin(async move {
+                    let _g = g;
+                    futures::future::pending::<anyhow::Result<Loaded<Vec<u8>>>>().await
+                })
+            }
+        };
+        // polls each held task once; keeps those still running
+        let step = |held: &Held| {
+            let mut tasks = held.0.lock().unwrap();
+            let waker = futures::task::noop_waker();
+            let mut cx = std::task::Context::from_waker(&waker);
+            tasks.retain_mut(|t| t.as_mut().poll(&mut cx).is_pending());
+        };
+        // source A wants 1 and 2: both start
+        m.begin_frame();
+        m.request(&1, 1.0);
+        m.request(&2, 1.0);
+        m.end_frame(slow(dropped.clone()));
+        assert_eq!(m.in_flight(), 2);
+        // switched to source B: A's keys (1, 2) are forgotten, its downloads
+        // cancelled; 3 and 4 take the slots in the same frame
+        assert_eq!(m.retain_keys(|k| *k > 2), 2);
+        m.begin_frame();
+        m.request(&3, 1.0);
+        m.request(&4, 1.0);
+        m.end_frame(slow(dropped.clone()));
+        // A's downloads were cancelled (an aborted task ends at its next
+        // poll, dropping its load); B's took the slots and run on
+        step(&held);
+        assert_eq!(dropped.load(Ordering::SeqCst), 2, "A's loads dropped unfinished");
+        assert_eq!(held.0.lock().unwrap().len(), 2);
+        assert_eq!(m.in_flight(), 2);
+        assert!(!m.poll(), "no result from a cancelled download");
+        m.begin_frame();
+        assert!(matches!(m.request(&3, 1.0), State::Downloading));
+        // dropping the manager (its source closed) cancels the rest
+        drop(m);
+        step(&held);
+        assert_eq!(dropped.load(Ordering::SeqCst), 4, "B's loads cancelled with the manager");
     }
 }

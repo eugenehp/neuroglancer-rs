@@ -11,6 +11,9 @@ use ng_core::panel::{wheel_zoom_amount, NamedAxes, PanelPointer, SlicePanel};
 use ng_core::CoordinateSpace;
 use serde_json::{json, Value};
 
+mod common;
+use common::nums;
+
 fn space(scales: [f64; 3]) -> Arc<CoordinateSpace> {
     let names = ["x", "y", "z"].map(String::from).to_vec();
     let units = vec!["m".to_string(); 3];
@@ -24,32 +27,28 @@ fn space(scales: [f64; 3]) -> Arc<CoordinateSpace> {
     )
 }
 
-fn floats(v: &Value) -> Vec<f64> {
-    v.as_array().unwrap().iter().map(|x| x.as_f64().unwrap()).collect()
-}
-
 fn check(nav: &mut Navigation, expected: &Value) {
     let name = expected["name"].as_str().unwrap();
     let pos: Vec<f64> = nav.position().iter().map(|&c| c as f64).collect();
-    assert_eq!(pos, floats(&expected["position"]), "{name}: position");
+    assert_eq!(pos, nums(&expected["position"]), "{name}: position");
     assert_eq!(nav.zoom(View::CrossSection), expected["crossSectionScale"].as_f64().unwrap(), "{name}: crossSectionScale");
     assert_eq!(nav.zoom(View::Projection), expected["projectionScale"].as_f64().unwrap(), "{name}: projectionScale");
     assert_eq!(nav.depth_range(View::CrossSection), expected["crossSectionDepth"].as_f64().unwrap(), "{name}: crossSectionDepth");
     assert_eq!(nav.depth_range(View::Projection), expected["projectionDepth"].as_f64().unwrap(), "{name}: projectionDepth");
     assert_eq!(
         vec![nav.relative_depth_range(View::CrossSection), nav.relative_depth_range(View::Projection)],
-        floats(&expected["relativeDepth"]),
+        nums(&expected["relativeDepth"]),
         "{name}: relativeDepthRange"
     );
     for (view, key) in [(View::CrossSection, "crossMat"), (View::Projection, "projMat")] {
         let m: Vec<f64> = nav.to_mat4(view).iter().map(|&x| x as f64).collect();
-        assert_eq!(m, floats(&expected[key]), "{name}: {key}");
+        assert_eq!(m, nums(&expected[key]), "{name}: {key}");
     }
     let info = nav.render_info();
     assert_eq!(info.canonical_voxel_physical_size, expected["canonicalVoxelPhysicalSize"].as_f64().unwrap(), "{name}");
-    assert_eq!(info.canonical_voxel_factors.to_vec(), floats(&expected["canonicalVoxelFactors"]), "{name}");
+    assert_eq!(info.canonical_voxel_factors.to_vec(), nums(&expected["canonicalVoxelFactors"]), "{name}");
     let indices: Vec<f64> = info.display_dimension_indices.iter().map(|&i| i as f64).collect();
-    assert_eq!(indices, floats(&expected["displayDimensionIndices"]), "{name}");
+    assert_eq!(indices, nums(&expected["displayDimensionIndices"]), "{name}");
     assert_eq!(Value::Object(nav.to_json()), expected["json"], "{name}: state JSON");
 }
 
@@ -130,9 +129,9 @@ fn matches_neuroglancer_step_for_step() {
         for (panel, key) in panels.into_iter().zip(["xy", "xz", "yz"]) {
             let e = &expected["panels"][key];
             let q: Vec<f64> = panel.orientation(nav).iter().map(|&x| x as f64).collect();
-            assert_eq!(q, floats(&e["orientation"]), "{name}: {key} orientation");
+            assert_eq!(q, nums(&e["orientation"]), "{name}: {key} orientation");
             let m: Vec<f64> = panel.inv_view_matrix(nav).iter().map(|&x| x as f64).collect();
-            assert_eq!(m, floats(&e["invView"]), "{name}: {key} invViewMatrix");
+            assert_eq!(m, nums(&e["invView"]), "{name}: {key} invViewMatrix");
         }
     };
 

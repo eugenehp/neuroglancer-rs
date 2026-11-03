@@ -259,13 +259,7 @@ impl NiftiVolumeInfo {
         let bounds = input.bounds.clone();
         DataSource::volume_with_bounds(
             format!("{url}|nifti:"),
-            CoordinateSpaceTransform {
-                rank,
-                source_rank: rank,
-                input_space: Arc::new(input),
-                output_space: Arc::new(output),
-                transform: self.transform.clone(),
-            },
+            CoordinateSpaceTransform::new(Arc::new(input), Arc::new(output), self.transform.clone()),
             volume,
             &bounds,
         )

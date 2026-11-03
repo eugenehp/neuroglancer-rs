@@ -6,6 +6,7 @@
 //! next finishes them (a polyline adds a point per trigger and finishes on
 //! one at the same place).
 
+use ng_core::js::numbers;
 use ng_viewer::Viewer;
 use serde_json::{json, Value};
 
@@ -17,10 +18,6 @@ pub(crate) struct InProgress {
     pub layer: usize,
     pub id: String,
     pub tool: String,
-}
-
-fn numbers(p: &[f64]) -> Value {
-    Value::Array(p.iter().map(|&v| ng_core::js::number(v)).collect())
 }
 
 fn point(v: &Value) -> Vec<f64> {

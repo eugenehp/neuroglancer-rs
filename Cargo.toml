@@ -14,7 +14,7 @@ members = [
 ]
 
 [workspace.package]
-version = "0.0.1"
+version = "0.0.2"
 edition = "2021"
 # threers requires 1.87 (wgpu 30).
 rust-version = "1.87"
@@ -30,7 +30,7 @@ publish = false
 # `exg_zarr::codec`), from crates.io. To work on threers alongside, add
 # `[patch.crates-io] threers = { path = "../threers" }`; its version must
 # match the requirement here, or cargo quietly ignores the patch.
-threers = { version = "0.0.7", default-features = false }
+threers = { version = "0.0.10", default-features = false }
 exg-nifti = "0.0.1"
 exg-zarr = "0.0.1"
 

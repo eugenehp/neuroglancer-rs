@@ -131,21 +131,6 @@ pub fn bin(x: f64) -> usize {
     }
 }
 
-/// A voxel's value as a number (uint64 rounded to the nearest double).
-pub fn value_f64(t: DataType, data: &[u8], i: usize) -> f64 {
-    let b = &data[i * t.bytes()..(i + 1) * t.bytes()];
-    match t {
-        DataType::Uint8 => b[0] as f64,
-        DataType::Int8 => b[0] as i8 as f64,
-        DataType::Uint16 => u16::from_le_bytes([b[0], b[1]]) as f64,
-        DataType::Int16 => i16::from_le_bytes([b[0], b[1]]) as f64,
-        DataType::Uint32 => u32::from_le_bytes(b.try_into().unwrap()) as f64,
-        DataType::Int32 => i32::from_le_bytes(b.try_into().unwrap()) as f64,
-        DataType::Uint64 => u64::from_le_bytes(b.try_into().unwrap()) as f64,
-        DataType::Float32 => f32::from_le_bytes(b.try_into().unwrap()) as f64,
-    }
-}
-
 /// The empirical CDF's vertices (`createCDFLineShader`): vertex `i` at
 /// `x` (its fraction of the panel) and the fraction of samples in bins
 /// `0..=i` (the last vertex leaving out bin 255, as the shader does).

@@ -11,12 +11,9 @@ use ng_core::transform::CoordinateSpaceTransform;
 use ng_core::CoordinateSpace;
 use serde_json::{json, Value};
 
-fn nums(v: &Value) -> Vec<f64> {
-    v.as_array().unwrap().iter().map(|x| x.as_f64().unwrap()).collect()
-}
-fn strs(v: &Value) -> Vec<String> {
-    v.as_array().unwrap().iter().map(|x| x.as_str().unwrap().to_owned()).collect()
-}
+mod common;
+use common::{nums, strs};
+
 /// Numbers as the golden writes them (non-finite as strings).
 fn js(x: f64) -> Value {
     if x.is_finite() {

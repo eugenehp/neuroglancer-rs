@@ -100,9 +100,50 @@ pub fn inverse(a: &[f64], n: usize) -> (Vec<f64>, f64) {
     (a, determinant)
 }
 
+/// A column-major 4×4 over `f64`: cameras and model matrices.
+pub type Mat4 = [f64; 16];
+
+/// The 4×4 identity.
+pub const IDENTITY4: Mat4 = [1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0];
+
+/// `a · b` for 4×4s.
+pub fn multiply4(a: &Mat4, b: &Mat4) -> Mat4 {
+    let mut c = [0.0; 16];
+    multiply_into(&mut c, 4, a, 4, b, 4, 4, 4, 4);
+    c
+}
+
+/// [`inverse`] of a 4×4: a singular matrix gives infinities/NaN.
+pub fn inverse4(a: &Mat4) -> Mat4 {
+    inverse(a, 4).0.try_into().unwrap()
+}
+
+/// The inverse of a 4×4, if it has a finite one.
+pub fn try_inverse4(a: &Mat4) -> Option<Mat4> {
+    let (inv, det) = inverse(a, 4);
+    (det != 0.0 && inv.iter().all(|x| x.is_finite())).then(|| inv.try_into().unwrap())
+}
+
+/// Point `p` through `m`, divided by `w` (a zero `w` taken as 1).
+pub fn transform_point4(m: &Mat4, p: [f64; 3]) -> [f64; 3] {
+    let w = m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15];
+    let w = if w == 0.0 { 1.0 } else { w };
+    [0, 1, 2].map(|r| (m[r] * p[0] + m[4 + r] * p[1] + m[8 + r] * p[2] + m[12 + r]) / w)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn inverse4_round_trips_and_rejects_singular() {
+        let m = [2.0, 0.0, 0.0, 0.0, 0.0, 3.0, 0.0, 0.0, 0.0, 0.0, 4.0, 0.0, 5.0, 6.0, 7.0, 1.0];
+        let p = multiply4(&m, &try_inverse4(&m).unwrap());
+        for (x, y) in p.iter().zip(IDENTITY4) {
+            assert!((x - y).abs() < 1e-12, "{p:?}");
+        }
+        assert_eq!(try_inverse4(&[0.0; 16]), None);
+    }
 
     #[test]
     fn inverse_round_trips() {

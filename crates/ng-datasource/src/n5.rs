@@ -11,6 +11,7 @@ use std::sync::Arc;
 
 use anyhow::{bail, ensure, Context, Result};
 use ng_core::coordinate_space::{BoundingBox, TransformedBoundingBox};
+use ng_core::js::{verify_array, verify_finite_positive_float, verify_positive_int};
 use ng_core::{CoordinateSpace, DataType};
 use ng_kvstore::{ByteRange, KvStoreLocation};
 use serde_json::{Map, Value};
@@ -59,18 +60,6 @@ struct ScaleMetadata {
     downsampling_factors: Vec<f64>,
 }
 
-fn positive_int(v: &Value) -> Result<u64> {
-    v.as_u64().filter(|&n| n > 0).with_context(|| format!("Expected positive integer, but received: {v}"))
-}
-
-fn finite_positive(v: &Value) -> Result<f64> {
-    v.as_f64().filter(|f| f.is_finite() && *f > 0.0).with_context(|| format!("Expected positive finite floating-point number, but received: {v}"))
-}
-
-fn array(v: &Value) -> Result<&Vec<Value>> {
-    v.as_array().with_context(|| format!("Expected array, but received: {v}"))
-}
-
 fn rank_check(rank: &mut Option<usize>, n: usize) -> Result<()> {
     match *rank {
         Some(r) if r != n => bail!("Rank mismatch, received {n} but expected {r}"),
@@ -83,10 +72,10 @@ fn rank_check(rank: &mut Option<usize>, n: usize) -> Result<()> {
 fn parse_scale_metadata(location: KvStoreLocation, o: &Map<String, Value>, scale_index: usize, factors: Option<Vec<f64>>) -> Result<ScaleMetadata> {
     let t = o.get("dataType").and_then(Value::as_str).context("dataType")?;
     let data_type = DataType::from_name(t).with_context(|| format!("Invalid enum value: {t:?}."))?;
-    let size: Vec<f64> = array(o.get("dimensions").context("dimensions")?)?.iter().map(|v| positive_int(v).map(|n| n as f32 as f64)).collect::<Result<_>>()?;
-    let block = array(o.get("blockSize").context("blockSize")?)?;
+    let size: Vec<f64> = verify_array(o.get("dimensions").context("dimensions")?)?.iter().map(|v| verify_positive_int(v).map(|n| n as f32 as f64)).collect::<Result<_>>()?;
+    let block = verify_array(o.get("blockSize").context("blockSize")?)?;
     ensure!(block.len() == size.len(), "Expected array of length {}, but received: {:?}", size.len(), block);
-    let chunk_size: Vec<u32> = block.iter().map(|v| positive_int(v).map(|n| n as u32)).collect::<Result<_>>()?;
+    let chunk_size: Vec<u32> = block.iter().map(|v| verify_positive_int(v).map(|n| n as u32)).collect::<Result<_>>()?;
     let encoding = match o.get("compression").filter(|v| !v.is_null()) {
         Some(c) => {
             let t = c.get("type").and_then(Value::as_str).context("type")?;
@@ -106,9 +95,9 @@ fn parse_scale_metadata(location: KvStoreLocation, o: &Map<String, Value>, scale
         Some(f) => f,
         None => match o.get("downsamplingFactors").filter(|v| !v.is_null()) {
             Some(v) => {
-                let a = array(v)?;
+                let a = verify_array(v)?;
                 ensure!(a.len() == size.len(), "Expected array of length {}, but received: {v}", size.len());
-                a.iter().map(finite_positive).collect::<Result<_>>()?
+                a.iter().map(verify_finite_positive_float).collect::<Result<_>>()?
             }
             None if scale_index == 0 => vec![1.0; size.len()],
             None => bail!("Expected downsamplingFactors attribute"),
@@ -167,7 +156,7 @@ fn unit(v: &Value) -> Result<ng_core::si_units::ParsedUnit> {
 /// (if the group gives them) downsampling factors.
 async fn multiscale_metadata(dir: &KvStoreLocation, a: &Map<String, Value>) -> Result<(CoordinateSpace, Vec<(KvStoreLocation, Option<Vec<f64>>)>)> {
     let mut rank = None;
-    let floats = |v: &Value| -> Result<Vec<f64>> { array(v)?.iter().map(finite_positive).collect() };
+    let floats = |v: &Value| -> Result<Vec<f64>> { verify_array(v)?.iter().map(verify_finite_positive_float).collect() };
     let mut scales = match a.get("resolution").filter(|v| !v.is_null()) {
         Some(v) => {
             let s = floats(v)?;
@@ -178,7 +167,7 @@ async fn multiscale_metadata(dir: &KvStoreLocation, a: &Map<String, Value>) -> R
     };
     let axes = match a.get("axes").filter(|v| !v.is_null()) {
         Some(v) => {
-            let names: Vec<String> = array(v)?.iter().map(|x| x.as_str().map(str::to_owned).with_context(|| format!("Expected string, but received: {x}"))).collect::<Result<_>>()?;
+            let names: Vec<String> = verify_array(v)?.iter().map(|x| x.as_str().map(str::to_owned).with_context(|| format!("Expected string, but received: {x}"))).collect::<Result<_>>()?;
             rank_check(&mut rank, names.len())?;
             Some(names)
         }
@@ -186,7 +175,7 @@ async fn multiscale_metadata(dir: &KvStoreLocation, a: &Map<String, Value>) -> R
     };
     let mut units = match a.get("units").filter(|v| !v.is_null()) {
         Some(v) => {
-            let u: Vec<_> = array(v)?.iter().map(unit).collect::<Result<_>>()?;
+            let u: Vec<_> = verify_array(v)?.iter().map(unit).collect::<Result<_>>()?;
             rank_check(&mut rank, u.len())?;
             Some(u)
         }
@@ -196,7 +185,7 @@ async fn multiscale_metadata(dir: &KvStoreLocation, a: &Map<String, Value>) -> R
     let mut single_factors = None;
     let mut all_factors: Option<Vec<Vec<f64>>> = None;
     let multi = |v: &Value, rank: &mut Option<usize>| -> Result<Vec<Vec<f64>>> {
-        let a = array(v)?;
+        let a = verify_array(v)?;
         ensure!(!a.is_empty(), "Expected non-empty array");
         a.iter()
             .map(|f| {
@@ -207,7 +196,7 @@ async fn multiscale_metadata(dir: &KvStoreLocation, a: &Map<String, Value>) -> R
             .collect()
     };
     if let Some(v) = a.get("downsamplingFactors").filter(|v| !v.is_null()) {
-        let arr = array(v)?;
+        let arr = verify_array(v)?;
         ensure!(!arr.is_empty(), "Expected non-empty array");
         if arr[0].is_array() {
             all_factors = Some(multi(v, &mut rank)?);
@@ -231,7 +220,7 @@ async fn multiscale_metadata(dir: &KvStoreLocation, a: &Map<String, Value>) -> R
     }
     let dimensions = match a.get("dimensions").filter(|v| !v.is_null()) {
         Some(v) => {
-            let d: Vec<u64> = array(v)?.iter().map(positive_int).collect::<Result<_>>()?;
+            let d: Vec<u64> = verify_array(v)?.iter().map(verify_positive_int).collect::<Result<_>>()?;
             rank_check(&mut rank, d.len())?;
             Some(d)
         }
@@ -320,7 +309,7 @@ pub async fn get(location: &KvStoreLocation) -> Result<DataSource> {
     let volume = MultiscaleVolume { data_type: base.data_type, volume_type: VolumeType::Image, rank, sources: vec![sources] };
     Ok(DataSource::volume_with_bounds(
         format!("{root_url}|n5:{path_from_root}"),
-        CoordinateSpaceTransform { rank, source_rank: rank, input_space: space.clone(), output_space: space.clone(), transform: ng_core::matrix::identity(n, n) },
+        CoordinateSpaceTransform::identity(space.clone()),
         volume,
         &space.bounds,
     ))

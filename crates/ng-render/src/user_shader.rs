@@ -792,6 +792,22 @@ pub enum ControlValue {
     TransferFunction(TransferFunction),
 }
 
+/// What of `values` is compiled into a shader, rather than read from its
+/// uniforms: the checkboxes, and the channels invlerps and transfer
+/// functions read. A change to either needs a recompile.
+pub fn compiled_values(values: &[ControlValue]) -> (Vec<bool>, Vec<Vec<u32>>) {
+    let checks = values.iter().filter_map(|v| if let ControlValue::Bool(b) = v { Some(*b) } else { None }).collect();
+    let channels = values
+        .iter()
+        .filter_map(|v| match v {
+            ControlValue::Invlerp { channel, .. } => Some(channel.clone()),
+            ControlValue::TransferFunction(tf) => Some(tf.channel.clone()),
+            _ => None,
+        })
+        .collect();
+    (checks, channels)
+}
+
 /// The values of `parsed`'s controls from a layer's `shaderControls`.
 pub fn control_values(parsed: &ParsedShader, t: DataType, json: Option<&Value>) -> Vec<ControlValue> {
     parsed
@@ -824,6 +840,32 @@ pub fn control_values(parsed: &ParsedShader, t: DataType, json: Option<&Value>) 
             }
         })
         .collect()
+}
+
+/// The `#define` for a slider, colour, checkbox or select control whose
+/// value starts at `ng_controls[k]` (a checkbox's is a constant); empty for
+/// the others.
+pub(crate) fn plain_control_define(name: &str, control: &Control, value: &ControlValue, k: usize) -> String {
+    let v = format!("ng_controls[{k}]");
+    match control {
+        Control::Slider { value_type: SliderType::Float, .. } => format!("#define {name} {v}\n"),
+        Control::Slider { value_type, .. } => format!("#define {name} {}({v})\n", value_type.glsl()),
+        Control::Color { .. } => format!("#define {name} vec3(ng_controls[{k}], ng_controls[{}], ng_controls[{}])\n", k + 1, k + 2),
+        Control::Checkbox { default } => {
+            let on = match value {
+                ControlValue::Bool(b) => *b,
+                _ => *default,
+            };
+            format!("#define {name} {on}\n")
+        }
+        Control::Select { value_type, .. } => match value_type {
+            SelectType::String => format!("#define {name} string_t(uint({v}))\n"),
+            SelectType::Int => format!("#define {name} int({v})\n"),
+            SelectType::Uint => format!("#define {name} uint({v})\n"),
+            SelectType::Float => format!("#define {name} {v}\n"),
+        },
+        Control::Invlerp { .. } | Control::TransferFunction { .. } => String::new(),
+    }
 }
 
 /// How many floats a control takes in the uniform array.
@@ -1082,22 +1124,7 @@ float ng_default_intensity;
     let mut k = 1;
     for ((name, control), value) in parsed.controls.iter().zip(values) {
         match control {
-            Control::Slider { value_type, .. } => {
-                let v = format!("ng_controls[{k}]");
-                let expr = match value_type {
-                    SliderType::Float => v,
-                    other => format!("{}({v})", other.glsl()),
-                };
-                s += &format!("#define {name} {expr}\n");
-            }
-            Control::Color { .. } => s += &format!("#define {name} vec3(ng_controls[{k}], ng_controls[{}], ng_controls[{}])\n", k + 1, k + 2),
-            Control::Checkbox { default } => {
-                let on = match value {
-                    ControlValue::Bool(b) => *b,
-                    _ => *default,
-                };
-                s += &format!("#define {name} {on}\n");
-            }
+            Control::Slider { .. } | Control::Color { .. } | Control::Checkbox { .. } | Control::Select { .. } => s += &plain_control_define(name, control, value, k),
             Control::Invlerp { clamp, channel, .. } => {
                 let channel = match value {
                     ControlValue::Invlerp { channel, .. } => channel,
@@ -1112,15 +1139,6 @@ float ng_default_intensity;
                     _ => &default.channel,
                 };
                 s += &transfer_function_glsl(t, name, k, base, channel);
-            }
-            Control::Select { value_type, .. } => {
-                let v = format!("ng_controls[{k}]");
-                s += &match value_type {
-                    SelectType::String => format!("#define {name} string_t(uint({v}))\n"),
-                    SelectType::Int => format!("#define {name} int({v})\n"),
-                    SelectType::Uint => format!("#define {name} uint({v})\n"),
-                    SelectType::Float => format!("#define {name} {v}\n"),
-                };
             }
         }
         k += width(control);
@@ -1150,6 +1168,36 @@ pub struct CompiledShader {
 pub struct CompileError {
     pub line: Option<usize>,
     pub message: String,
+}
+
+impl ParsedShader {
+    /// The first error parsing found, as a compile error.
+    pub(crate) fn check(&self) -> Result<(), CompileError> {
+        match self.errors.first() {
+            Some(e) => Err(CompileError { line: Some(e.line), message: e.message.clone() }),
+            None => Ok(()),
+        }
+    }
+}
+
+/// GLSL fragment `source` (helpers, then `parsed`'s code) through naga to
+/// WGSL. Errors are located on the user's lines, `None` in the helpers.
+pub(crate) fn fragment_to_wgsl(parsed: &ParsedShader, source: &str) -> Result<String, CompileError> {
+    // The user's code starts after the helpers.
+    let prelude = source.find(&parsed.code).map_or(0, |at| source[..at].matches('\n').count());
+    let error = |location: Option<naga::SourceLocation>, message: String| CompileError {
+        line: location.and_then(|l| (l.line_number as usize).checked_sub(1 + prelude)).filter(|&l| l <= parsed.code.matches('\n').count()),
+        message,
+    };
+    let mut frontend = naga::front::glsl::Frontend::default();
+    let module = frontend.parse(&naga::front::glsl::Options::from(naga::ShaderStage::Fragment), source).map_err(|e| {
+        let location = e.errors.first().and_then(|first| first.meta.location(source).into());
+        error(location, e.errors.iter().map(|x| x.kind.to_string()).collect::<Vec<_>>().join("\n"))
+    })?;
+    let info = naga::valid::Validator::new(naga::valid::ValidationFlags::all(), naga::valid::Capabilities::all())
+        .validate(&module)
+        .map_err(|e| error(e.location(source), e.as_inner().to_string()))?;
+    naga::back::wgsl::write_string(&module, &info, naga::back::wgsl::WriterFlags::empty()).map_err(|e| error(None, e.to_string()))
 }
 
 /// `parsed` compiled for data of type `t` (checkboxes at `values`): its
@@ -1185,24 +1233,9 @@ pub enum VolumeMode {
 /// [`OitOut`]-style targets for [`VolumeMode::On`], else the projection's
 /// colour and `1 − depth`, with the intensity as its depth.
 pub fn compile_volume_rendering_mode(t: DataType, parsed: &ParsedShader, values: &[ControlValue], extents: &[u32], mode: VolumeMode) -> Result<CompiledShader, CompileError> {
-    if let Some(e) = parsed.errors.first() {
-        return Err(CompileError { line: Some(e.line), message: e.message.clone() });
-    }
+    parsed.check()?;
     let source = glsl_for(t, parsed, values, extents, true);
-    let prelude = source.find(&parsed.code).map_or(0, |at| source[..at].matches('\n').count());
-    let error = |location: Option<naga::SourceLocation>, message: String| CompileError {
-        line: location.and_then(|l| (l.line_number as usize).checked_sub(1 + prelude)).filter(|&l| l <= parsed.code.matches('\n').count()),
-        message,
-    };
-    let mut frontend = naga::front::glsl::Frontend::default();
-    let module = frontend.parse(&naga::front::glsl::Options::from(naga::ShaderStage::Fragment), &source).map_err(|e| {
-        let location = e.errors.first().and_then(|first| first.meta.location(&source).into());
-        error(location, e.errors.iter().map(|x| x.kind.to_string()).collect::<Vec<_>>().join("\n"))
-    })?;
-    let info = naga::valid::Validator::new(naga::valid::ValidationFlags::all(), naga::valid::Capabilities::all())
-        .validate(&module)
-        .map_err(|e| error(e.location(&source), e.as_inner().to_string()))?;
-    let wgsl = naga::back::wgsl::write_string(&module, &info, naga::back::wgsl::WriterFlags::empty()).map_err(|e| error(None, e.to_string()))?;
+    let wgsl = fragment_to_wgsl(parsed, &source)?;
     let wgsl = with_body(&without_entry_point(&wgsl), "fn ng_lut(", "let w = i32(textureDimensions(slice_lookup).x);\n    let j = i + 0;\n    return textureLoad(slice_lookup, vec2<i32>(j % w, j / w), 0).r;");
     let wgsl = with_body(&wgsl, "fn ng_fetch(", "let j = i + 0;\n    return textureLoad(volume, ng_voxel + vec3<i32>(0, 0, j * ng_depth), 0);");
     let n = uniforms(parsed, t, values, 0.0).len();
@@ -1368,25 +1401,9 @@ fn raw_name(t: DataType) -> &'static str {
 /// (`slice_color_at`: each channel's slab is the texture's depth over
 /// their count).
 pub fn compile_with_channels(t: DataType, parsed: &ParsedShader, values: &[ControlValue], extents: &[u32]) -> Result<CompiledShader, CompileError> {
-    if let Some(e) = parsed.errors.first() {
-        return Err(CompileError { line: Some(e.line), message: e.message.clone() });
-    }
+    parsed.check()?;
     let source = glsl_with_channels(t, parsed, values, extents);
-    // The user's code starts after the helpers.
-    let prelude = source.find(&parsed.code).map_or(0, |at| source[..at].matches('\n').count());
-    let error = |location: Option<naga::SourceLocation>, message: String| CompileError {
-        line: location.and_then(|l| (l.line_number as usize).checked_sub(1 + prelude)).filter(|&l| l <= parsed.code.matches('\n').count()),
-        message,
-    };
-    let mut frontend = naga::front::glsl::Frontend::default();
-    let module = frontend.parse(&naga::front::glsl::Options::from(naga::ShaderStage::Fragment), &source).map_err(|e| {
-        let location = e.errors.first().and_then(|first| first.meta.location(&source).into());
-        error(location, e.errors.iter().map(|x| x.kind.to_string()).collect::<Vec<_>>().join("\n"))
-    })?;
-    let info = naga::valid::Validator::new(naga::valid::ValidationFlags::all(), naga::valid::Capabilities::all())
-        .validate(&module)
-        .map_err(|e| error(e.location(&source), e.as_inner().to_string()))?;
-    let wgsl = naga::back::wgsl::write_string(&module, &info, naga::back::wgsl::WriterFlags::empty()).map_err(|e| error(None, e.to_string()))?;
+    let wgsl = fragment_to_wgsl(parsed, &source)?;
     let wgsl = with_body(&without_entry_point(&wgsl), "fn ng_lut(", "let w = i32(textureDimensions(slice_lookup).x);\n    let j = i + 0;\n    return textureLoad(slice_lookup, vec2<i32>(j % w, j / w), 0).r;");
     let wgsl = if extents.is_empty() { wgsl } else { with_body(&wgsl, "fn ng_fetch(", "let j = i + 0;\n    return textureLoad(volume, ng_voxel + vec3<i32>(0, 0, j * ng_depth), 0);") };
     let n = uniforms(parsed, t, values, 0.0).len();
@@ -1411,8 +1428,23 @@ fn slice_color(value : vec4<{scalar}>, params : array<vec4<f32>, 4>) -> vec4<f32
     // Channels: the voxel within the first channel's slab, kept for the
     // others' reads.
     let channels = extents.iter().map(|&e| e.max(1)).product::<u32>();
+    // An image layer's clip bounds, in the texture's voxels, come in
+    // `params[2]` and `params[3]` (`w` 1 when set): a pixel outside them is
+    // not drawn, as neuroglancer's chunk box is cut to them.
+    let clipped = "if (params[3].w > 0.5 && (any(voxel < params[2].xyz) || any(voxel >= params[3].xyz))) {\n        discard;\n    }";
     let at = if extents.is_empty() {
-        String::new()
+        format!(
+            r#"
+fn slice_color_at(voxel : vec3<f32>, params : array<vec4<f32>, 4>) -> vec4<f32> {{
+    let size = vec3<f32>(textureDimensions(volume));
+    if (any(voxel < vec3<f32>(0.0)) || any(voxel >= size)) {{
+        discard;
+    }}
+    {clipped}
+    return slice_color(textureLoad(volume, vec3<i32>(voxel), 0), params);
+}}
+"#
+        )
     } else {
         format!(
             r#"
@@ -1425,6 +1457,7 @@ fn slice_color_at(voxel : vec3<f32>, params : array<vec4<f32>, 4>) -> vec4<f32> 
     if (any(voxel < vec3<f32>(0.0)) || v.x >= size.x || v.y >= size.y || v.z >= ng_depth) {{
         discard;
     }}
+    {clipped}
     ng_voxel = v;
     return slice_color(textureLoad(volume, v, 0), params);
 }}
@@ -1604,8 +1637,11 @@ mod tests {
             let u = uniforms(&p, t, &values, 0.25);
             assert_eq!(u.len(), compiled.uniforms);
             assert_eq!((u[0], u[9]), (0.25, 1.5));
+            // each pixel checked against the clip bounds (`params[2]`, `[3]`)
+            assert!(compiled.wgsl.contains("fn slice_color_at(") && compiled.wgsl.contains("any(voxel >= params[3].xyz)"), "{t:?}");
             // The WGSL, with the pipeline's declarations, validates.
-            let lookup = "@group(0) @binding(2) var slice_lookup : texture_2d<u32>;\n";
+            let sample = if matches!(compiled.sample, VolumeSample::Uint) { "u32" } else { "f32" };
+            let lookup = format!("@group(0) @binding(1) var volume : texture_3d<{sample}>;\n@group(0) @binding(2) var slice_lookup : texture_2d<u32>;\n");
             let module = naga::front::wgsl::parse_str(&format!("{lookup}{}", compiled.wgsl)).unwrap_or_else(|e| panic!("{t:?}: {}", e.emit_to_string(&compiled.wgsl)));
             naga::valid::Validator::new(naga::valid::ValidationFlags::all(), naga::valid::Capabilities::all()).validate(&module).unwrap();
         }

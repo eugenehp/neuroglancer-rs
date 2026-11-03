@@ -396,17 +396,9 @@ impl MultiscaleVolumeInfo {
     pub fn data_source(&self, dir: &ng_kvstore::KvStoreLocation) -> DataSource {
         let dir = dir.as_directory();
         let url = dir.url();
-        let rank = self.model_space.rank();
-        let transform = CoordinateSpaceTransform {
-            rank,
-            source_rank: rank,
-            input_space: self.model_space.clone(),
-            output_space: self.model_space.clone(),
-            transform: ng_core::matrix::identity(rank + 1, rank + 1),
-        };
         DataSource::volume_with_bounds(
             format!("{url}|neuroglancer-precomputed:"),
-            transform,
+            CoordinateSpaceTransform::identity(self.model_space.clone()),
             self.volume(&dir),
             &self.model_space.bounds,
         )
@@ -429,7 +421,11 @@ pub async fn get(location: &ng_kvstore::KvStoreLocation) -> Result<DataSource> {
     }
     let info = parse_info(&info)?;
     let mut source = info.data_source(&dir);
-    if let Some(mesh) = &info.mesh {
+    // An image has no segments to mesh: a `mesh` key in its info (FlyWire's
+    // FAFB EM carries one, copied from its segmentation's) only costs a
+    // request that 404s. Neuroglancer asks regardless; nothing is lost here.
+    let mesh = info.mesh.as_ref().filter(|_| !matches!(info.volume_type, VolumeType::Image));
+    if let Some(mesh) = mesh {
         // `getMeshSource`: a directory whose `info`, if any, names its
         // format (none: the legacy single-resolution one).
         let location = dir.child(mesh).as_directory();
@@ -484,7 +480,7 @@ fn object_data_source(dir: &ng_kvstore::KvStoreLocation, subsource: crate::model
     let space = Arc::new(CoordinateSpace::new(true, ["x", "y", "z"].map(String::from).to_vec(), vec!["m".into(); 3], vec![1e-9; 3]));
     DataSource {
         canonical_url: format!("{}|neuroglancer-precomputed:", dir.url()),
-        model_transform: CoordinateSpaceTransform { rank: 3, source_rank: 3, input_space: space.clone(), output_space: space, transform: ng_core::matrix::identity(4, 4) },
+        model_transform: CoordinateSpaceTransform::identity(space),
         subsources: vec![crate::model::SubsourceEntry { id: "default".into(), default: true, subsource }],
     }
 }
@@ -501,11 +497,10 @@ fn skeletons_data_source(dir: &ng_kvstore::KvStoreLocation, info: &Value) -> Res
 /// bounds), the identity onto it.
 fn annotation_data_source(dir: &ng_kvstore::KvStoreLocation, info: &Value) -> Result<DataSource> {
     let info = crate::annotation::parse_info(dir, info)?;
-    let rank = info.rank;
     let space = Arc::new(CoordinateSpace::new(true, info.names.clone(), info.units.clone(), info.scales.clone()).with_bounding_boxes(vec![TransformedBoundingBox::identity(BoundingBox { lower_bounds: info.lower_bound.clone(), upper_bounds: info.upper_bound.clone() })]));
     Ok(DataSource {
         canonical_url: format!("{}|neuroglancer-precomputed:", dir.url()),
-        model_transform: CoordinateSpaceTransform { rank, source_rank: rank, input_space: space.clone(), output_space: space, transform: ng_core::matrix::identity(rank + 1, rank + 1) },
+        model_transform: CoordinateSpaceTransform::identity(space),
         subsources: vec![crate::model::SubsourceEntry { id: "default".into(), default: true, subsource: crate::model::Subsource::Annotations(Box::new(info)) }],
     })
 }

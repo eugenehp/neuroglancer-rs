@@ -7,7 +7,6 @@
 
 use anyhow::{anyhow, bail, ensure, Context, Result};
 use ng_core::matrix;
-use ng_core::si_units::{all_si_prefixes, exp10};
 use ng_core::CoordinateSpace;
 use serde_json::Value;
 
@@ -33,29 +32,7 @@ const SUPPORTED_VERSIONS: [&str; 6] = ["0.4", "0.5-dev", "0.5", "0.6.dev1", "0.6
 
 /// `OME_UNITS`: `(unit, scale)`.
 fn ome_unit(name: &str) -> Option<(&'static str, f64)> {
-    Some(match name {
-        "angstrom" => ("m", 1e-10),
-        "foot" => ("m", 0.3048),
-        "inch" => ("m", 0.0254),
-        "mile" => ("m", 1609.34),
-        // neuroglancer's constant, digit for digit.
-        #[allow(clippy::excessive_precision)]
-        "parsec" => ("m", 3.0856775814913673e16),
-        "yard" => ("m", 0.9144),
-        "minute" => ("s", 60.0),
-        "hour" => ("s", 3600.0),
-        "day" => ("s", 86400.0),
-        _ => {
-            for (base, unit) in [("meter", "m"), ("second", "s")] {
-                if let Some(prefix) = name.strip_suffix(base) {
-                    if let Some(p) = all_si_prefixes().find(|p| p.long_prefix == prefix) {
-                        return Some((unit, exp10(p.exponent)));
-                    }
-                }
-            }
-            return None;
-        }
-    })
+    super::named_unit(name, false)
 }
 
 struct Axis {

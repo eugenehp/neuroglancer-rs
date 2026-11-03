@@ -145,7 +145,7 @@ pub fn data_source(location: &KvStoreLocation, m: &Metadata) -> Result<DataSourc
     let volume = MultiscaleVolume { data_type: DataType::Uint8, volume_type: VolumeType::Image, rank, sources: vec![sources] };
     Ok(DataSource::volume_with_bounds(
         format!("{}|deepzoom:", location.url()),
-        CoordinateSpaceTransform { rank, source_rank: rank, input_space: space.clone(), output_space: space.clone(), transform: ng_core::matrix::identity(n, n) },
+        CoordinateSpaceTransform::identity(space.clone()),
         volume,
         &space.bounds,
     ))

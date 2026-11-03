@@ -91,6 +91,19 @@ fn range_header(offset: u64, length: u64) -> String {
     format!("bytes={}-{}", offset, offset + length - 1)
 }
 
+/// A ranged GET's body: a 200 means the server ignored the range and sent
+/// the whole object, so the range is sliced out here.
+fn ranged_body(status: u16, body: Vec<u8>, offset: u64, length: Option<u64>) -> Vec<u8> {
+    match (status, length) {
+        (200, Some(length)) => {
+            let start = (offset as usize).min(body.len());
+            let end = (start + length as usize).min(body.len());
+            body[start..end].to_vec()
+        }
+        _ => body,
+    }
+}
+
 impl KvStore for HttpStore {
     fn read(&self, key: &str, range: ByteRange) -> ReadFuture {
         let url = self.object_url(key);
@@ -211,15 +224,7 @@ fn read_blocking(url: String, range: ByteRange) -> crate::ReadResult {
     let status = response.status();
     let mut body = Vec::new();
     std::io::Read::read_to_end(&mut response.into_reader(), &mut body).with_context(|| format!("reading {url}"))?;
-    Ok(Some(match (status, length) {
-        // The server ignored the range: slice it here.
-        (200, Some(length)) => {
-            let start = (offset as usize).min(body.len());
-            let end = (start + length as usize).min(body.len());
-            body[start..end].to_vec()
-        }
-        _ => body,
-    }))
+    Ok(Some(ranged_body(status, body, offset, length)))
 }
 
 /// `wasRedirectedToDirectoryListing`.
@@ -256,9 +261,69 @@ async fn fetch_range(url: String, range: ByteRange) -> crate::ReadResult {
     use wasm_bindgen::JsCast;
     use wasm_bindgen_futures::JsFuture;
 
-    async fn fetch(url: &str, method: &str, range: Option<String>) -> anyhow::Result<Option<web_sys::Response>> {
+    /// Aborts the request when the read is dropped before it finishes: a chunk
+    /// nobody wants any more (a source switched away, a view moved on) stops
+    /// holding one of the browser's connections to the host, which the
+    /// chunks that are wanted now would otherwise queue behind.
+    struct AbortOnDrop(Option<web_sys::AbortController>);
+    impl Drop for AbortOnDrop {
+        fn drop(&mut self) {
+            if let Some(c) = self.0.take() {
+                c.abort();
+            }
+        }
+    }
+
+    /// `fetch_once`, retried as neuroglancer's `fetchOk` does: a server
+    /// pushing back (429) or failing for now (500, 502, 503, 504) is asked
+    /// again after a pause — its `Retry-After` if it names one, else 0.5 s
+    /// doubling to 8 s, jittered so many chunks do not come back at once —
+    /// up to `RETRIES` times. Without it a rate limit's refusals were holes
+    /// for good (FAFB at a 24-at-once limit: 9 tiles in 10 drawn missing).
+    /// A request that never got a response (a dropped connection,
+    /// `net::ERR_FAILED`) is asked again `NETWORK_RETRIES` times before it
+    /// counts as absent: one blip on a `zarr.json` left a whole volume
+    /// unopened. A CORS refusal fails the same way every time, so it
+    /// costs only those few extra requests.
+    async fn fetch(url: &str, method: &str, range: Option<String>, signal: Option<&web_sys::AbortSignal>) -> anyhow::Result<Option<web_sys::Response>> {
+        const RETRIES: u32 = 6;
+        const NETWORK_RETRIES: u32 = 2;
+        let mut attempt = 0;
+        let mut network = 0;
+        loop {
+            match fetch_once(url, method, range.clone(), signal).await? {
+                Fetched::Retry(after) if attempt < RETRIES => {
+                    crate::RETRIED.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                    let backoff = (500.0 * 2f64.powi(attempt as i32)).min(8000.0) * (0.5 + 0.5 * js_sys::Math::random());
+                    crate::global::sleep(after.unwrap_or(backoff) as i32).await;
+                    attempt += 1;
+                }
+                Fetched::Retry(_) => return Err(anyhow!("{method} {url}: still refused after {RETRIES} retries")),
+                Fetched::Unreached if network < NETWORK_RETRIES && !signal.is_some_and(|s| s.aborted()) => {
+                    crate::RETRIED.fetch_add(1, std::sync::atomic::Ordering::Relaxed);
+                    crate::global::sleep((300.0 * (1.0 + js_sys::Math::random()) * f64::from(network + 1)) as i32).await;
+                    network += 1;
+                }
+                Fetched::Unreached => return Ok(None),
+                Fetched::Done(r) => return Ok(r),
+            }
+        }
+    }
+
+    enum Fetched {
+        Done(Option<web_sys::Response>),
+        /// worth asking again, after this long (ms) if the server said
+        Retry(Option<f64>),
+        /// no response at all: a network or CORS failure, or an abort
+        Unreached,
+    }
+
+    async fn fetch_once(url: &str, method: &str, range: Option<String>, signal: Option<&web_sys::AbortSignal>) -> anyhow::Result<Fetched> {
         let init = web_sys::RequestInit::new();
         init.set_method(method);
+        if let Some(s) = signal {
+            init.set_signal(Some(s));
+        }
         if let Some(r) = range {
             let headers = web_sys::Headers::new().map_err(|e| anyhow!("{e:?}"))?;
             headers.set("range", &r).map_err(|e| anyhow!("{e:?}"))?;
@@ -268,21 +333,30 @@ async fn fetch_range(url: String, range: ByteRange) -> crate::ReadResult {
         let promise = crate::global::fetch(url, &init).context("no fetch in this global scope")?;
         let response = match JsFuture::from(promise).await {
             Ok(r) => r.dyn_into::<web_sys::Response>().map_err(|e| anyhow!("{e:?}"))?,
-            // A network/CORS failure: status 0, "not found" to neuroglancer.
-            Err(_) => return Ok(None),
+            // A network/CORS failure: status 0, "not found" to neuroglancer
+            // once the retries are spent.
+            Err(_) => return Ok(Fetched::Unreached),
         };
         match response.status() {
-            404 | 403 => Ok(None),
-            s if (200..300).contains(&s) => Ok(Some(response)),
+            404 | 403 => Ok(Fetched::Done(None)),
+            s if (200..300).contains(&s) => Ok(Fetched::Done(Some(response))),
+            429 | 500 | 502 | 503 | 504 => {
+                // Retry-After in seconds (the HTTP-date form is left to the back-off)
+                let after = response.headers().get("retry-after").ok().flatten().and_then(|v| v.trim().parse::<f64>().ok()).map(|s| (s * 1000.0).min(30_000.0));
+                Ok(Fetched::Retry(after))
+            }
             s => Err(anyhow!("{method} {url}: HTTP {s}")),
         }
     }
 
+    let mut guard = AbortOnDrop(web_sys::AbortController::new().ok());
+    let signal = guard.0.as_ref().map(|c| c.signal());
+    let signal = signal.as_ref();
     let (offset, length) = match range {
         ByteRange::Full => (0, None),
         ByteRange::Range { offset, length } => (offset, Some(length)),
         ByteRange::Suffix(n) => {
-            let Some(head) = fetch(&url, "HEAD", None).await? else { return Ok(None) };
+            let Some(head) = fetch(&url, "HEAD", None, signal).await? else { return Ok(None) };
             let total: u64 = head
                 .headers()
                 .get("content-length")
@@ -297,7 +371,7 @@ async fn fetch_range(url: String, range: ByteRange) -> crate::ReadResult {
     if length == Some(0) {
         return Ok(Some(vec![]));
     }
-    let Some(response) = fetch(&url, "GET", length.map(|l| range_header(offset, l))).await? else {
+    let Some(response) = fetch(&url, "GET", length.map(|l| range_header(offset, l)), signal).await? else {
         return Ok(None);
     };
     if redirected_to_directory(&url, &response.url()) {
@@ -308,14 +382,9 @@ async fn fetch_range(url: String, range: ByteRange) -> crate::ReadResult {
         .await
         .map_err(|e| anyhow!("{e:?}"))?;
     let body = js_sys::Uint8Array::new(&buffer).to_vec();
-    Ok(Some(match (status, length) {
-        (200, Some(length)) => {
-            let start = (offset as usize).min(body.len());
-            let end = (start + length as usize).min(body.len());
-            body[start..end].to_vec()
-        }
-        _ => body,
-    }))
+    // read to the end: nothing left to abort
+    guard.0 = None;
+    Ok(Some(ranged_body(status, body, offset, length)))
 }
 
 #[cfg(test)]

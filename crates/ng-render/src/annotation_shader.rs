@@ -17,7 +17,7 @@ use std::sync::Arc;
 
 use threers::renderer::readback::AsyncReadback;
 
-use crate::user_shader::{CompileError, Control, ControlValue, ParsedShader, SelectType, SelectValue, SliderType};
+use crate::user_shader::{CompileError, Control, ControlValue, ParsedShader, SelectValue};
 
 /// A property's type in the shader (`annotationPropertyTypeRenderHandlers`).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -299,43 +299,10 @@ pub fn glsl(parsed: &ParsedShader, values: &[ControlValue], properties: &[(Strin
     }
     let mut k = 0;
     for ((name, control), value) in parsed.controls.iter().zip(values) {
-        match control {
-            Control::Slider { value_type, .. } => {
-                let v = format!("ng_controls[{k}]");
-                s += &format!(
-                    "#define {name} {}\n",
-                    match value_type {
-                        SliderType::Float => v,
-                        other => format!("{}({v})", other.glsl()),
-                    }
-                );
-                k += 1;
-            }
-            Control::Color { .. } => {
-                s += &format!("#define {name} vec3(ng_controls[{k}], ng_controls[{}], ng_controls[{}])\n", k + 1, k + 2);
-                k += 3;
-            }
-            Control::Checkbox { default } => {
-                let on = match value {
-                    ControlValue::Bool(b) => *b,
-                    _ => *default,
-                };
-                s += &format!("#define {name} {on}\n");
-            }
-            Control::Select { value_type, .. } => {
-                let v = format!("ng_controls[{k}]");
-                s += &match value_type {
-                    SelectType::String => format!("#define {name} string_t(uint({v}))\n"),
-                    SelectType::Int => format!("#define {name} int({v})\n"),
-                    SelectType::Uint => format!("#define {name} uint({v})\n"),
-                    SelectType::Float => format!("#define {name} {v}\n"),
-                };
-                k += 1;
-            }
-            // Property invlerps and transfer functions are not supported
-            // in annotation shaders here yet.
-            Control::Invlerp { .. } | Control::TransferFunction { .. } => {}
-        }
+        // Property invlerps and transfer functions are not supported in
+        // annotation shaders here yet: no define, no uniforms.
+        s += &crate::user_shader::plain_control_define(name, control, value, k);
+        k += control_width(control);
     }
     s += "#define main ng_user_main\n";
     s += &parsed.code;
@@ -345,16 +312,16 @@ pub fn glsl(parsed: &ParsedShader, values: &[ControlValue], properties: &[(Strin
 
 /// The values the controls read, in [`glsl`]'s order.
 fn control_count(parsed: &ParsedShader) -> usize {
-    parsed
-        .controls
-        .iter()
-        .map(|(_, c)| match c {
-            Control::Slider { .. } | Control::Select { .. } => 1,
-            Control::Color { .. } => 3,
-            _ => 0,
-        })
-        .sum::<usize>()
-        .max(1)
+    parsed.controls.iter().map(|(_, c)| control_width(c)).sum::<usize>().max(1)
+}
+
+/// How many floats a control takes in `ng_controls`.
+fn control_width(control: &Control) -> usize {
+    match control {
+        Control::Slider { .. } | Control::Select { .. } => 1,
+        Control::Color { .. } => 3,
+        _ => 0,
+    }
 }
 
 /// The control values for [`glsl`]: sliders, colours and selects.
@@ -381,24 +348,9 @@ pub fn control_values(parsed: &ParsedShader, values: &[ControlValue]) -> Vec<f32
 /// or (`projection`) the 3D view: the WGSL of `ng_annotation_style`, a
 /// compute entry point over the annotations.
 pub fn compile(parsed: &ParsedShader, values: &[ControlValue], properties: &[(String, PropertyShaderType)], projection: bool) -> Result<CompiledAnnotationShader, CompileError> {
-    if let Some(e) = parsed.errors.first() {
-        return Err(CompileError { line: Some(e.line), message: e.message.clone() });
-    }
+    parsed.check()?;
     let source = glsl(parsed, values, properties, projection);
-    let prelude = source.find(&parsed.code).map_or(0, |at| source[..at].matches('\n').count());
-    let error = |location: Option<naga::SourceLocation>, message: String| CompileError {
-        line: location.and_then(|l| (l.line_number as usize).checked_sub(1 + prelude)).filter(|&l| l <= parsed.code.matches('\n').count()),
-        message,
-    };
-    let mut frontend = naga::front::glsl::Frontend::default();
-    let module = frontend.parse(&naga::front::glsl::Options::from(naga::ShaderStage::Fragment), &source).map_err(|e| {
-        let location = e.errors.first().and_then(|first| first.meta.location(&source).into());
-        error(location, e.errors.iter().map(|x| x.kind.to_string()).collect::<Vec<_>>().join("\n"))
-    })?;
-    let info = naga::valid::Validator::new(naga::valid::ValidationFlags::all(), naga::valid::Capabilities::all())
-        .validate(&module)
-        .map_err(|e| error(e.location(&source), e.as_inner().to_string()))?;
-    let wgsl = naga::back::wgsl::write_string(&module, &info, naga::back::wgsl::WriterFlags::empty()).map_err(|e| error(None, e.to_string()))?;
+    let wgsl = crate::user_shader::fragment_to_wgsl(parsed, &source)?;
     let wgsl = crate::user_shader::without_entry_point(&wgsl);
     let (n, p) = (control_count(parsed), properties.len().max(1));
     let defaults = AnnotationStyle::default();

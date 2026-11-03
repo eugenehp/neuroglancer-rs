@@ -4,7 +4,7 @@
 //! (`forEachPlaneIntersectingVolumetricChunk`) from `src/sliceview/`.
 
 use ng_core::glm::Mat4;
-use ng_core::matrix;
+use ng_core::matrix::{self, inverse4, multiply4, transform_point4};
 use ng_core::navigation::DisplayDimensionRenderInfo;
 
 use crate::layer::VolumeLayer;
@@ -43,21 +43,16 @@ pub struct ChunkDraw {
     /// and NDC of that region → texture voxels.
     pub rect: [f64; 4],
     pub ndc_to_texture: [f32; 16],
+    /// The clip bounds in the texture's voxels (lower, upper): what of the
+    /// chunk is drawn. `rect` is the box's outline on the panel, so on a
+    /// plane at an angle to the box a pixel inside it can still be outside
+    /// the bounds; the shader checks each (`uLowerClipBound`, …).
+    pub clip: [[f32; 3]; 2],
 }
 
-fn mat_mul(a: &[f64; 16], b: &[f64; 16]) -> [f64; 16] {
-    let m = matrix::multiply(a, b, 4);
-    m.try_into().unwrap()
-}
-
-fn mat_inv(a: &[f64; 16]) -> [f64; 16] {
-    matrix::inverse(a, 4).0.try_into().unwrap()
-}
-
-pub fn apply(m: &[f64; 16], p: [f64; 3]) -> [f64; 3] {
-    let w = m[3] * p[0] + m[7] * p[1] + m[11] * p[2] + m[15];
-    let w = if w == 0.0 { 1.0 } else { w };
-    [0, 1, 2].map(|r| (m[r] * p[0] + m[4 + r] * p[1] + m[8 + r] * p[2] + m[12 + r]) / w)
+impl ChunkDraw {
+    /// No clip bounds beyond the texture's own.
+    pub const UNCLIPPED: [[f32; 3]; 2] = [[-1e9; 3], [1e9; 3]];
 }
 
 /// The panel's camera: view (display coordinates) and orthographic
@@ -82,7 +77,7 @@ impl PanelCamera {
     /// Display coordinates → NDC (z: along the view direction, 1 view pixel
     /// per unit).
     pub fn view_projection(&self) -> [f64; 16] {
-        let view = mat_inv(&self.inv_view);
+        let view = inverse4(&self.inv_view);
         // `mat4.ortho(-w/2, w/2, h/2, -h/2, -1, 1)` with the depth scaled to
         // 1 per view unit (only the sign of z is used).
         let mut proj = [0.0; 16];
@@ -90,7 +85,7 @@ impl PanelCamera {
         proj[5] = -2.0 / self.height;
         proj[10] = 1.0;
         proj[15] = 1.0;
-        mat_mul(&proj, &view)
+        multiply4(&proj, &view)
     }
 
     /// `pixelSize`: physical length of one view pixel along view x.
@@ -279,8 +274,8 @@ pub fn visible_chunks(layer: &VolumeLayer, ps: &PanelSource, camera: &PanelCamer
     scale[10] = size[2];
     scale[15] = 1.0;
     // Chunk grid units → NDC.
-    let mvp = mat_mul(&camera.view_projection(), &mat_mul(&ps.chunk_to_display, &scale));
-    let inv = mat_inv(&mvp);
+    let mvp = multiply4(&camera.view_projection(), &multiply4(&ps.chunk_to_display, &scale));
+    let inv = inverse4(&mvp);
     // The viewport rectangle on the plane, in chunk grid units.
     let mut lower = [0i64; 3];
     let mut upper = [0i64; 3];
@@ -291,7 +286,7 @@ pub fn visible_chunks(layer: &VolumeLayer, ps: &PanelSource, camera: &PanelCamer
         upper[i] = ((c + x + y + 1.0).floor() as i64).min(upper_grid[i] as i64);
     }
     // Panel NDC → chunk display voxels.
-    let display_to_voxel_ndc = mat_inv(&mat_mul(&camera.view_projection(), &ps.chunk_to_display));
+    let display_to_voxel_ndc = inverse4(&multiply4(&camera.view_projection(), &ps.chunk_to_display));
     let rank = layer.source_rank;
     let mut out = vec![];
     for gz in lower[2]..upper[2] {
@@ -306,13 +301,13 @@ pub fn visible_chunks(layer: &VolumeLayer, ps: &PanelSource, camera: &PanelCamer
                 // Whether the plane cuts the chunk (`isAABBIntersectingPlane`,
                 // on the whole chunk); what is drawn is the box cut to the
                 // clip bounds (the vertex shader's `uLowerClipBound`, …).
-                let whole: Vec<[f64; 3]> = (0..8).map(|b| apply(&mvp, [g[0] + (b & 1) as f64, g[1] + ((b >> 1) & 1) as f64, g[2] + ((b >> 2) & 1) as f64])).collect();
+                let whole: Vec<[f64; 3]> = (0..8).map(|b| transform_point4(&mvp, [g[0] + (b & 1) as f64, g[1] + ((b >> 1) & 1) as f64, g[2] + ((b >> 2) & 1) as f64])).collect();
                 let (zmin, zmax) = whole.iter().fold((f64::INFINITY, f64::NEG_INFINITY), |(a, b), c| (a.min(c[2]), b.max(c[2])));
                 if zmin > 0.0 || zmax < 0.0 {
                     continue; // the plane misses the chunk
                 }
                 let corners: Vec<[f64; 3]> = (0..8)
-                    .map(|b| apply(&mvp, [if b & 1 == 1 { hi[0] } else { lo[0] }, if (b >> 1) & 1 == 1 { hi[1] } else { lo[1] }, if (b >> 2) & 1 == 1 { hi[2] } else { lo[2] }]))
+                    .map(|b| transform_point4(&mvp, [if b & 1 == 1 { hi[0] } else { lo[0] }, if (b >> 1) & 1 == 1 { hi[1] } else { lo[1] }, if (b >> 2) & 1 == 1 { hi[2] } else { lo[2] }]))
                     .collect();
                 let (mut x0, mut x1, mut y0, mut y1) = (f64::INFINITY, f64::NEG_INFINITY, f64::INFINITY, f64::NEG_INFINITY);
                 for c in &corners {
@@ -349,7 +344,7 @@ pub fn visible_chunks(layer: &VolumeLayer, ps: &PanelSource, camera: &PanelCamer
                 // voxel (neuroglancer's `BIAS_EPSILON`): a pixel on the
                 // boundary between two chunks then belongs to exactly one,
                 // rather than rounding out of both and leaving a seam.
-                let ndc_to_voxel = mat_mul(&display_to_voxel_ndc, &sub);
+                let ndc_to_voxel = multiply4(&display_to_voxel_ndc, &sub);
                 for k in 0..3 {
                     // A plane exactly on the volume's upper face (parallel
                     // to it): neuroglancer's chunk box is closed and clipped
@@ -363,7 +358,7 @@ pub fn visible_chunks(layer: &VolumeLayer, ps: &PanelSource, camera: &PanelCamer
                     });
                     origin[12 + k] = -g[k] * size[k] + if on_upper_face { -1e-4 } else { 1e-4 };
                 }
-                let ndc_to_texture = mat_mul(&origin, &ndc_to_voxel).map(|x| x as f32);
+                let ndc_to_texture = multiply4(&origin, &ndc_to_voxel).map(|x| x as f32);
                 let mut grid = vec![0u64; rank];
                 for (k, cd) in ps.chunk_display_dims.iter().enumerate() {
                     if let Some(c) = cd {
@@ -373,6 +368,13 @@ pub fn visible_chunks(layer: &VolumeLayer, ps: &PanelSource, camera: &PanelCamer
                 for &(c, chunk, _) in &ps.fixed {
                     grid[c] = chunk;
                 }
+                let mut clip = ChunkDraw::UNCLIPPED;
+                for k in 0..3 {
+                    if ps.chunk_display_dims[k].is_some() {
+                        clip[0][k] = ((clip_lower[k] - g[k]) * size[k]) as f32;
+                        clip[1][k] = ((clip_upper[k] - g[k]) * size[k]) as f32;
+                    }
+                }
                 out.push(ChunkDraw {
                     scale: ps.scale,
                     grid,
@@ -380,11 +382,33 @@ pub fn visible_chunks(layer: &VolumeLayer, ps: &PanelSource, camera: &PanelCamer
                     fixed: ps.fixed.clone(),
                     rect,
                     ndc_to_texture,
+                    clip,
                 });
             }
         }
     }
     out
+}
+
+/// `modelClipBounds`: how far the position is inside a box (model `lower`
+/// to `upper`) along the model dimensions not `shown`: 1 inside, falling to 0
+/// a voxel outside; and the position in model coordinates. `None` if
+/// `position` is shorter than the global rank.
+fn position_clip(layer: &VolumeLayer, position: &[f32], lower: &[f64], upper: &[f64], shown: &[usize]) -> Option<(f64, Vec<f64>)> {
+    let rank = layer.rank;
+    let n = rank + 1;
+    let model_rank = lower.len().min(rank);
+    // The position in model coordinates.
+    let layer_pos = layer.layer_position(position, 0.5)?;
+    let (l2m, _) = matrix::inverse(&layer.model_to_layer, n);
+    let model_pos: Vec<f64> = (0..rank).map(|c| (0..n).map(|k| l2m[k * n + c] * layer_pos[k]).sum()).collect();
+    let mut clip = 1.0;
+    for d in (0..model_rank).filter(|d| !shown.contains(d)) {
+        let (a, b) = (lower[d].min(upper[d]), lower[d].max(upper[d]));
+        let c = model_pos[d];
+        clip *= (1.0 - (c.clamp(a, b) - c).abs()).max(0.0);
+    }
+    Some((clip, model_pos))
 }
 
 /// A bounding box annotation (`AxisAlignedBoundingBox`, in model
@@ -421,26 +445,7 @@ pub fn box_cross_section(
         })
     };
     let shown: Vec<usize> = (0..model_rank).filter(|&d| display_of(d)).collect();
-    // The position in model coordinates (`modelClipBounds`).
-    let mut layer_pos = vec![0.0; n];
-    layer_pos[rank] = 1.0;
-    for (d, g) in layer.layer_to_global.iter().enumerate() {
-        layer_pos[d] = match g {
-            Some(g) => position[*g] as f64,
-            None => 0.5,
-        };
-    }
-    let (l2m, _) = matrix::inverse(m2l, n);
-    let model_pos: Vec<f64> = (0..rank).map(|c| (0..n).map(|k| l2m[k * n + c] * layer_pos[k]).sum()).collect();
-    let mut clip = 1.0;
-    for d in 0..model_rank {
-        if shown.contains(&d) {
-            continue;
-        }
-        let (a, b) = (lower[d].min(upper[d]), lower[d].max(upper[d]));
-        let c = model_pos[d];
-        clip *= (1.0 - (c.clamp(a, b) - c).abs()).max(0.0);
-    }
+    let (clip, model_pos) = position_clip(layer, position, lower, upper, &shown)?;
     if clip == 0.0 {
         return None;
     }
@@ -458,7 +463,7 @@ pub fn box_cross_section(
                 *slot = (0..rank).map(|c| m2l[c * n + ld] * model[c]).sum::<f64>() + m2l[rank * n + ld];
             }
         }
-        apply(&view_projection, display)
+        transform_point4(&view_projection, display)
     };
     let count = 1usize << shown.len();
     let mut corners: Vec<[f64; 3]> = (0..count).map(corner).collect();
@@ -555,25 +560,7 @@ pub fn box_edges_3d(
         Display(usize),
     }
     let axes: Vec<Axis> = shown.iter().map(|&d| Axis::Model(d)).chain(missing.iter().map(|&i| Axis::Display(i))).take(3).collect();
-    let mut layer_pos = vec![0.0; n];
-    layer_pos[rank] = 1.0;
-    for (d, g) in layer.layer_to_global.iter().enumerate() {
-        layer_pos[d] = match g {
-            Some(g) => position[*g] as f64,
-            None => 0.5,
-        };
-    }
-    let (l2m, _) = matrix::inverse(m2l, n);
-    let model_pos: Vec<f64> = (0..rank).map(|c| (0..n).map(|k| l2m[k * n + c] * layer_pos[k]).sum()).collect();
-    let mut clip = 1.0;
-    for d in 0..model_rank {
-        if shown.contains(&d) {
-            continue;
-        }
-        let (a, b) = (lower[d].min(upper[d]), lower[d].max(upper[d]));
-        let c = model_pos[d];
-        clip *= (1.0 - (c.clamp(a, b) - c).abs()).max(0.0);
-    }
+    let (clip, model_pos) = position_clip(layer, position, lower, upper, &shown)?;
     if clip == 0.0 {
         return None;
     }
@@ -672,7 +659,7 @@ pub fn volume_rendering_chunks(layer: &VolumeLayer, sources: &[Option<PanelSourc
     }
     let depth_range = view_frustum_depth_range(projection);
     let target = (depth_range / depth_samples).powi(3);
-    let view = mat_inv(&inv_view.map(|x| x as f64));
+    let view = inverse4(&inv_view.map(|x| x as f64));
     let view_det = det3(&view);
     let canonical_to_physical: f64 = info.voxel_physical_scales.iter().product();
     let view_volume = |ps: &PanelSource| (det3(&ps.chunk_to_display) * view_det).abs();
@@ -710,7 +697,7 @@ pub fn volume_rendering_chunks(layer: &VolumeLayer, sources: &[Option<PanelSourc
         }
     }
     let vp = view_projection.map(|x| x as f64);
-    let mvp = mat_mul(&vp, &scaled).map(|x| x as f32);
+    let mvp = multiply4(&vp, &scaled).map(|x| x as f32);
     let planes = ng_datasource::multiscale_mesh::frustum_planes(&mvp);
     let base: Vec<u64> = {
         let mut g = vec![0u64; layer.source_rank];
@@ -828,7 +815,7 @@ pub fn visible_annotation_cells(levels: &[AnnotationLevelLayout], projection: &[
     let viewport_area = size.0 * size.1;
     let target_num = viewport_area / render_scale_target.powi(2);
     let density_target = target_num / effective_volume;
-    let view_projection = mat_mul(projection, view);
+    let view_projection = multiply4(projection, view);
     let mut total_density = 0.0;
     for (index, level) in levels.iter().enumerate().rev() {
         if total_density >= density_target {
@@ -848,7 +835,7 @@ pub fn visible_annotation_cells(levels: &[AnnotationLevelLayout], projection: &[
                     scaled[4 * i + j] *= s;
                 }
             }
-            let mvp = mat_mul(&view_projection, &scaled).map(|x| x as f32);
+            let mvp = multiply4(&view_projection, &scaled).map(|x| x as f32);
             let planes = ng_datasource::multiscale_mesh::frustum_planes(&mvp);
             for cell in cells_within_frustum([0.0; 3], level.grid, &planes, &level.dims, base) {
                 out.push(AnnotationCell { level: index, cell, draw_fraction, physical_spacing, pixel_spacing });

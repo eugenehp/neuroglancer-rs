@@ -117,6 +117,15 @@ pub fn parse_float(s: &str) -> f64 {
 /// then `0x`/`0X` and hex digits, or decimal digits; the longest such prefix.
 /// NaN if there are no digits. `"12.7"` is 12, `"1e3"` is 1, `"0x1f"` is 31.
 pub fn parse_int(s: &str) -> f64 {
+    parse_int_with(s, true)
+}
+
+/// `parseInt(string, 10)`: decimal digits only, so `"0x1f"` is 0.
+pub fn parse_int10(s: &str) -> f64 {
+    parse_int_with(s, false)
+}
+
+fn parse_int_with(s: &str, hex: bool) -> f64 {
     let s = s.trim_start_matches(is_js_whitespace);
     let (negative, s) = match s.as_bytes().first() {
         Some(b'-') => (true, &s[1..]),
@@ -124,7 +133,7 @@ pub fn parse_int(s: &str) -> f64 {
         _ => (false, s),
     };
     let (radix, s) = match s.get(..2) {
-        Some("0x" | "0X") => (16, &s[2..]),
+        Some("0x" | "0X") if hex => (16, &s[2..]),
         _ => (10, s),
     };
     let digits: String = s.chars().take_while(|c| c.is_digit(radix)).collect();
@@ -381,6 +390,30 @@ mod number_to_string_tests {
     }
 }
 
+/// `verifyInt`: `parseInt(String(v), 10)`, so `2.5` is 2 and `"7"` is 7.
+pub fn verify_int(v: &serde_json::Value) -> anyhow::Result<f64> {
+    let x = parse_int10(&to_string(v));
+    anyhow::ensure!(x.is_finite(), "Expected integer, but received: {v}.");
+    Ok(x)
+}
+
+/// `verifyPositiveInt`.
+pub fn verify_positive_int(v: &serde_json::Value) -> anyhow::Result<u64> {
+    let x = verify_int(v)?;
+    anyhow::ensure!(x > 0.0, "Expected positive integer, but received: {}.", number_to_string(x));
+    Ok(x as u64)
+}
+
+/// `parseArray`'s check: `v` is an array.
+pub fn verify_array(v: &serde_json::Value) -> anyhow::Result<&Vec<serde_json::Value>> {
+    v.as_array().ok_or_else(|| anyhow::anyhow!("Expected array, but received: {v}."))
+}
+
+/// A JSON array of `xs`, each as [`number`] writes it.
+pub fn numbers<T: Copy + Into<f64>>(xs: &[T]) -> serde_json::Value {
+    serde_json::Value::Array(xs.iter().map(|&x| number(x.into())).collect())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -441,6 +474,18 @@ mod parse_float_tests {
         assert_eq!(to_string(&json!(3)), "3");
         assert_eq!(to_string(&json!([null, 2])), ",2");
         assert_eq!(parse_float(&to_string(&json!([7]))), 7.0);
+    }
+
+    #[test]
+    fn verify_int_reads_as_parse_int_does() {
+        use serde_json::json;
+        assert_eq!(verify_int(&json!(2.5)).unwrap(), 2.0);
+        assert_eq!(verify_int(&json!("7")).unwrap(), 7.0);
+        assert_eq!(verify_int(&json!("0x1f")).unwrap(), 0.0);
+        assert!(verify_int(&json!("x")).is_err());
+        assert!(verify_int(&json!(null)).is_err());
+        assert_eq!(verify_positive_int(&json!(3)).unwrap(), 3);
+        assert!(verify_positive_int(&json!(0)).is_err());
     }
 
     #[test]

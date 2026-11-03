@@ -180,8 +180,17 @@ pub fn parse_v3(zarr_json: &[u8]) -> Result<Node> {
 
 /// `UNITS` in `metadata/parse.ts`: `(unit, scale)`.
 fn zarr_unit(name: &str) -> Option<(&'static str, f64)> {
+    if name.is_empty() {
+        return Some(("", 1.0));
+    }
+    named_unit(name, true)
+}
+
+/// The units zarr's `UNITS` and OME's `OME_UNITS` share, `(unit, scale)`:
+/// imperial lengths, parsecs, minutes to days, and metres and seconds with
+/// each SI prefix (`"micrometer"`; with `short`, also `"um"`).
+pub(crate) fn named_unit(name: &str, short: bool) -> Option<(&'static str, f64)> {
     Some(match name {
-        "" => ("", 1.0),
         "angstrom" => ("m", 1e-10),
         "foot" => ("m", 0.3048),
         "inch" => ("m", 0.0254),
@@ -194,9 +203,9 @@ fn zarr_unit(name: &str) -> Option<(&'static str, f64)> {
         "hour" => ("s", 3600.0),
         "day" => ("s", 86400.0),
         _ => {
-            for (long, short, unit) in [("meter", "m", "m"), ("second", "s", "s")] {
+            for (long, abbreviation, unit) in [("meter", "m", "m"), ("second", "s", "s")] {
                 for p in all_si_prefixes() {
-                    if name == format!("{}{long}", p.long_prefix) || name == format!("{}{short}", p.prefix) {
+                    if name.strip_suffix(long) == Some(p.long_prefix) || (short && name.strip_suffix(abbreviation) == Some(p.prefix)) {
                         return Some((unit, exp10(p.exponent)));
                     }
                 }
@@ -407,16 +416,9 @@ impl ZarrMultiscale {
     }
 
     pub fn data_source(&self, url: &str, zarr_version: u8) -> DataSource {
-        let rank = self.coordinate_space.rank();
         DataSource::volume_with_bounds(
             format!("{url}|zarr{zarr_version}:"),
-            CoordinateSpaceTransform {
-                rank,
-                source_rank: rank,
-                input_space: self.coordinate_space.clone(),
-                output_space: self.coordinate_space.clone(),
-                transform: self.base_transform.clone(),
-            },
+            CoordinateSpaceTransform::over(self.coordinate_space.clone(), self.base_transform.clone()),
             self.volume(),
             &self.coordinate_space.bounds,
         )
@@ -429,11 +431,20 @@ async fn read_json(location: &KvStoreLocation, key: &str) -> Result<Option<Vec<u
 
 /// `getMetadata` with no version given: tries v2 and v3; both is an error.
 pub async fn get_node(location: &KvStoreLocation) -> Result<Option<(Node, u8)>> {
+    get_node_version(location, None).await
+}
+
+/// `getMetadata`: with a version, only that version's metadata is read (a
+/// `zarr3://` source asks for no `.zarray`/`.zattrs`, which 404 on every scale).
+pub async fn get_node_version(location: &KvStoreLocation, version: Option<u8>) -> Result<Option<(Node, u8)>> {
     let dir = location.as_directory();
+    let v2 = version != Some(3);
+    let v3 = version != Some(2);
+    let none = || async { Ok(None) };
     let (zarray, zattrs, zarr_json) = futures::join!(
-        read_json(&dir, ".zarray"),
-        read_json(&dir, ".zattrs"),
-        read_json(&dir, "zarr.json")
+        async { if v2 { read_json(&dir, ".zarray").await } else { none().await } },
+        async { if v2 { read_json(&dir, ".zattrs").await } else { none().await } },
+        async { if v3 { read_json(&dir, "zarr.json").await } else { none().await } }
     );
     let (zarray, zattrs, zarr_json) = (zarray?, zattrs?, zarr_json?);
     let v2 = match (&zarray, &zattrs) {
@@ -462,7 +473,8 @@ async fn resolve_ome(location: &KvStoreLocation, ome: ome::OmeMultiscale, zarr_v
         // `scale.url` is the base URL plus the dataset path.
         let relative = scale.url.strip_prefix(&base.url()).with_context(|| format!("{} is not under {}", scale.url, base.url()))?;
         let location = base.child(relative.trim_end_matches('/')).as_directory();
-        let node = get_node(&location).await?;
+        // the group's own version: its arrays are the same
+        let node = get_node_version(&location, Some(zarr_version)).await?;
         locations.push(location);
         match node {
             Some((Node::Array(a), v)) if v == zarr_version => arrays.push(*a),
@@ -515,9 +527,14 @@ async fn resolve_ome(location: &KvStoreLocation, ome: ome::OmeMultiscale, zarr_v
 /// `ZarrDataSource.get` for a directory: a single array, or an OME
 /// multiscale group.
 pub async fn get(location: &KvStoreLocation) -> Result<DataSource> {
+    get_version(location, None).await
+}
+
+/// [`get`] for a known Zarr version (`zarr2://`, `zarr3://`).
+pub async fn get_version(location: &KvStoreLocation, version: Option<u8>) -> Result<DataSource> {
     let dir = location.as_directory();
     let url = dir.url();
-    let (node, version) = get_node(&dir).await?.context("No zarr metadata found")?;
+    let (node, version) = get_node_version(&dir, version).await?.context("No zarr metadata found")?;
     let multiscale = match node {
         Node::Array(a) => single_array_multiscale(&dir, *a)?,
         Node::Group(attrs) => {

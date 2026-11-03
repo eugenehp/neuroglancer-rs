@@ -226,6 +226,15 @@ pub fn parse_pipeline(url: &str) -> Result<KvStoreLocation> {
     Ok(location)
 }
 
+/// HTTP requests asked again since the page started (a server pushing back,
+/// or failing for now): a host tuning its downloads at once reads it.
+pub static RETRIED: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+
+/// How many requests have been retried so far (`RETRIED`).
+pub fn retried() -> u64 {
+    RETRIED.load(std::sync::atomic::Ordering::Relaxed)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

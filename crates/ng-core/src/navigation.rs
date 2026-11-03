@@ -121,7 +121,7 @@ impl Position {
         if self.coordinates.is_empty() {
             return None;
         }
-        Some(Value::Array(self.coordinates.iter().map(|&c| js::number(c as f64)).collect()))
+        Some(js::numbers(&self.coordinates))
     }
 
     /// `restoreState` for a value present in the JSON.
@@ -168,7 +168,7 @@ impl Orientation {
         if self.0 == glm::QUAT_IDENTITY {
             return None;
         }
-        Some(Value::Array(self.0.iter().map(|&c| js::number(c as f64)).collect()))
+        Some(js::numbers(&self.0))
     }
 
     /// Anything other than four finite numbers resets to the identity.

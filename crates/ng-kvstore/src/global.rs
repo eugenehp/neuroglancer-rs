@@ -22,3 +22,16 @@ pub(crate) fn caches() -> Option<web_sys::CacheStorage> {
     }
     global.dyn_ref::<web_sys::WorkerGlobalScope>().and_then(|w| w.caches().ok())
 }
+
+/// Resolves after `ms` milliseconds (`setTimeout` on whichever global).
+pub(crate) async fn sleep(ms: i32) {
+    let promise = js_sys::Promise::new(&mut |resolve, _| {
+        let global = js_sys::global();
+        if let Some(w) = global.dyn_ref::<web_sys::Window>() {
+            let _ = w.set_timeout_with_callback_and_timeout_and_arguments_0(&resolve, ms);
+        } else if let Some(w) = global.dyn_ref::<web_sys::WorkerGlobalScope>() {
+            let _ = w.set_timeout_with_callback_and_timeout_and_arguments_0(&resolve, ms);
+        }
+    });
+    let _ = wasm_bindgen_futures::JsFuture::from(promise).await;
+}

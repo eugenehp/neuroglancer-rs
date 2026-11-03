@@ -198,8 +198,16 @@ fn fs_line_oit(in : LineOut) -> OitOut {
     return emit_oit(line_color(in), in.clip.z);
 }
 
-// `transparencyCopyHelper`: the accumulated colour over what is drawn,
-// blended `(ONE_MINUS_SRC_ALPHA, SRC_ALPHA)`.
+// `transparencyCopyHelper`: the accumulated colour over what is drawn.
+// neuroglancer returns the revealage `r` as alpha and blends
+// `(ONE_MINUS_SRC_ALPHA, SRC_ALPHA)`, alpha included: over its opaque panel
+// background the alpha that leaves does not matter. Over a transparent
+// target — scene mode, whose host composites by it — it came out
+// `r · (1 − r)`: a quarter at most, and nothing where the layers are densest,
+// so a volume vanished from the host's frame. The coverage `1 − r` is
+// returned instead and blended as "over" (`SRC_ALPHA, ONE_MINUS_SRC_ALPHA`;
+// alpha `ONE, ONE_MINUS_SRC_ALPHA`): the same colour, and the alpha a
+// premultiplied target needs.
 @group(0) @binding(0) var oit_accum : texture_2d<f32>;
 @group(0) @binding(1) var oit_alpha : texture_2d<f32>;
 @vertex
@@ -217,7 +225,7 @@ fn fs_oit_copy(@builtin(position) p : vec4<f32>) -> @location(0) vec4<f32> {
     if (v1.r == 0.0) {
         discard;
     }
-    return vec4<f32>(v0.rgb / v1.r, v0.a);
+    return vec4<f32>(v0.rgb / v1.r, 1.0 - v0.a);
 }
 "#;
 
@@ -420,19 +428,8 @@ pub struct TransparentMarks {
     pub circles: Vec<crate::annotations::Circle>,
 }
 
-/// A feathered line in 3D (`emitLine`): endpoints in GL clip coordinates.
-#[derive(Debug, Clone, Copy)]
-pub struct Line3 {
-    pub a: [f64; 4],
-    pub b: [f64; 4],
-    pub width: f64,
-    pub feather: f64,
-    pub color: [f32; 4],
-    /// The colour at `b`, mixed along it.
-    pub color_b: [f32; 4],
-    /// The pick ID written (0 for none).
-    pub pick: u32,
-}
+/// A feathered line in 3D (`emitLine`): the same as a cross-section's.
+pub type Line3 = crate::annotations::Line;
 
 pub struct PerspectiveRenderer {
     quad: wgpu::RenderPipeline,
@@ -889,8 +886,10 @@ impl PerspectiveRenderer {
         let oit_copy_layout = device.create_bind_group_layout(&wgpu::BindGroupLayoutDescriptor { label: Some("ng perspective transparency copy"), entries: &[texture_entry(0), texture_entry(1)] });
         let oit_copy = {
             let layout = device.create_pipeline_layout(&wgpu::PipelineLayoutDescriptor { label: Some("ng perspective transparency copy"), bind_group_layouts: &[Some(&oit_copy_layout)], immediate_size: 0 });
-            // `blendFunc(ONE_MINUS_SRC_ALPHA, SRC_ALPHA)`.
-            let component = wgpu::BlendComponent { src_factor: wgpu::BlendFactor::OneMinusSrcAlpha, dst_factor: wgpu::BlendFactor::SrcAlpha, operation: wgpu::BlendOperation::Add };
+            // `blendFunc(ONE_MINUS_SRC_ALPHA, SRC_ALPHA)` with the revealage as
+            // alpha, done as "over" with the coverage (see `fs_oit_copy`).
+            let color = wgpu::BlendComponent { src_factor: wgpu::BlendFactor::SrcAlpha, dst_factor: wgpu::BlendFactor::OneMinusSrcAlpha, operation: wgpu::BlendOperation::Add };
+            let alpha = wgpu::BlendComponent { src_factor: wgpu::BlendFactor::One, dst_factor: wgpu::BlendFactor::OneMinusSrcAlpha, operation: wgpu::BlendOperation::Add };
             device.create_render_pipeline(&wgpu::RenderPipelineDescriptor {
                 label: Some("ng perspective transparency copy"),
                 layout: Some(&layout),
@@ -898,7 +897,7 @@ impl PerspectiveRenderer {
                 fragment: Some(wgpu::FragmentState {
                     module: &shader,
                     entry_point: Some("fs_oit_copy"),
-                    targets: &[Some(wgpu::ColorTargetState { format: OFFSCREEN_FORMAT, blend: Some(wgpu::BlendState { color: component, alpha: component }), write_mask: wgpu::ColorWrites::ALL })],
+                    targets: &[Some(wgpu::ColorTargetState { format: OFFSCREEN_FORMAT, blend: Some(wgpu::BlendState { color, alpha }), write_mask: wgpu::ColorWrites::ALL })],
                     compilation_options: Default::default(),
                 }),
                 primitive: wgpu::PrimitiveState::default(),
@@ -1398,73 +1397,9 @@ impl PerspectiveRenderer {
     }
 }
 
-/// `clipLineToDepthRange` on GL clip coordinates.
-fn clip_line_to_depth_range(mut a: [f64; 4], mut b: [f64; 4]) -> Option<([f64; 4], [f64; 4])> {
-    let (mut tmin, mut tmax) = (0.0f64, 1.0f64);
-    let k1 = b[3] - a[3] + a[2] - b[2];
-    let k2 = a[3] - b[3] + a[2] - b[2];
-    let q1 = (a[2] - a[3]) / k1;
-    let q2 = (a[2] + a[3]) / k2;
-    if k1 > 0.0 {
-        tmin = tmin.max(q1);
-    } else if k1 < 0.0 {
-        tmax = tmax.min(q1);
-    }
-    if k2 > 0.0 {
-        tmax = tmax.min(q2);
-    } else if k2 < 0.0 {
-        tmin = tmin.max(q2);
-    }
-    if tmin > tmax {
-        return None;
-    }
-    let (ta, tb) = (a, b);
-    let mix = |t: f64| std::array::from_fn(|i| ta[i] + (tb[i] - ta[i]) * t);
-    a = mix(tmin);
-    b = mix(tmax);
-    Some((a, b))
-}
-
-/// `emitLine` in 3D: the quad, in device coordinates (w = 1), mirrored in y
-/// and with depth `(z + 1) / 2`.
+/// [`line_corners`](crate::annotations::line_corners) as the 3D line
+/// shader's vertices.
 fn line_quad(l: &Line3, width: f64, height: f64) -> Option<[LineVertex; 6]> {
-    let total = if l.width == 0.0 { 0.0 } else { l.width + 2.0 * l.feather };
-    if total == 0.0 {
-        return None;
-    }
-    let (a, b) = clip_line_to_depth_range(l.a, l.b)?;
-    // `getLineEndpointCoefficient`: the end of the (clipped) quad, so the
-    // colours span what is drawn.
-    let color_at = |x: f64| -> [f32; 4] { std::array::from_fn(|i| l.color[i] + (l.color_b[i] - l.color[i]) * x as f32) };
-    let mut da = [a[0] / a[3], a[1] / a[3], a[2] / a[3]];
-    let mut db = [b[0] / b[3], b[1] / b[3], b[2] / b[3]];
-    let params = [1.0 / width, 1.0 / height];
-    let d = [db[0] - da[0], db[1] - da[1]];
-    let pixel_length = ((d[0] / params[0] * 0.5).powi(2) + (d[1] / params[1] * 0.5).powi(2)).sqrt();
-    let dir = if pixel_length < 1e-3 {
-        da[2] = 0.0;
-        db[2] = 0.0;
-        [1.0, 0.0]
-    } else {
-        let len = (d[0] * d[0] + d[1] * d[1]).sqrt();
-        [d[0] / len, d[1] / len]
-    };
-    let n = [dir[1] / params[1] * params[0], -dir[0] / params[0] * params[1]];
-    let nl = (n[0] * n[0] + n[1] * n[1]).sqrt();
-    let n = [n[0] / nl, n[1] / nl];
-    let feather_fraction = (l.feather.max(1e-6) / total) as f32;
-    let vertex = |x: f64, y: f64| {
-        let p = [da[0] + (db[0] - da[0]) * x, da[1] + (db[1] - da[1]) * x, da[2] + (db[2] - da[2]) * x];
-        let px = p[0] + y * n[0] * total * params[0];
-        let py = p[1] + y * n[1] * total * params[1];
-        LineVertex {
-            position: [px as f32, -py as f32, ((p[2] + 1.0) / 2.0) as f32],
-            line_coord: y as f32,
-            feather_fraction,
-            color: color_at(x),
-            pick: l.pick,
-        }
-    };
-    let (v00, v10, v01, v11) = (vertex(0.0, -1.0), vertex(1.0, -1.0), vertex(0.0, 1.0), vertex(1.0, 1.0));
-    Some([v00, v10, v11, v00, v11, v01])
+    let (corners, feather_fraction) = crate::annotations::line_corners(l, width, height)?;
+    Some(corners.map(|c| LineVertex { position: c.position, line_coord: c.line_coord, feather_fraction, color: c.color, pick: l.pick }))
 }

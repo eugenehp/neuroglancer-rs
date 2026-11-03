@@ -34,6 +34,22 @@ impl DataType {
         }
     }
 
+    /// Element `i` of little-endian `data`.
+    pub fn read(self, data: &[u8], i: usize) -> Scalar {
+        let n = self.bytes();
+        let b = &data[i * n..(i + 1) * n];
+        match self {
+            DataType::Uint8 => Scalar::Uint(b[0] as u64),
+            DataType::Int8 => Scalar::Int(b[0] as i8 as i64),
+            DataType::Uint16 => Scalar::Uint(u16::from_le_bytes([b[0], b[1]]) as u64),
+            DataType::Int16 => Scalar::Int(i16::from_le_bytes([b[0], b[1]]) as i64),
+            DataType::Uint32 => Scalar::Uint(u32::from_le_bytes(b.try_into().unwrap()) as u64),
+            DataType::Int32 => Scalar::Int(i32::from_le_bytes(b.try_into().unwrap()) as i64),
+            DataType::Uint64 => Scalar::Uint(u64::from_le_bytes(b.try_into().unwrap())),
+            DataType::Float32 => Scalar::Float(f32::from_le_bytes(b.try_into().unwrap())),
+        }
+    }
+
     /// `DATA_TYPE_SIGNED`: `None` for float.
     pub fn signed(self) -> Option<bool> {
         match self {
@@ -63,6 +79,36 @@ impl DataType {
         Self::ALL
             .into_iter()
             .find(|t| t.name().eq_ignore_ascii_case(name))
+    }
+}
+
+/// One element of a [`DataType`], exact: uint64 segment IDs keep all their
+/// bits until [`Scalar::as_f64`] rounds them.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum Scalar {
+    Uint(u64),
+    Int(i64),
+    Float(f32),
+}
+
+impl Scalar {
+    /// As a number (uint64 rounded to the nearest double).
+    pub fn as_f64(self) -> f64 {
+        match self {
+            Scalar::Uint(x) => x as f64,
+            Scalar::Int(x) => x as f64,
+            Scalar::Float(x) => x as f64,
+        }
+    }
+}
+
+impl std::fmt::Display for Scalar {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Scalar::Uint(x) => x.fmt(f),
+            Scalar::Int(x) => x.fmt(f),
+            Scalar::Float(x) => x.fmt(f),
+        }
     }
 }
 

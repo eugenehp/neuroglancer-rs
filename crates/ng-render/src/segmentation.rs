@@ -228,12 +228,15 @@ pub struct VisibleSet {
     len: usize,
     /// Changes when the texture is replaced (bindings must be remade).
     pub generation: u64,
+    /// Changes whenever the contents are written (what draws from it may
+    /// differ).
+    pub revision: u64,
 }
 
 impl VisibleSet {
     pub fn new(device: &wgpu::Device) -> Self {
         let (texture, view) = Self::allocate(device, 1);
-        Self { texture, view, capacity: SET_WIDTH as usize, len: 0, generation: 0 }
+        Self { texture, view, capacity: SET_WIDTH as usize, len: 0, generation: 0, revision: 0 }
     }
 
     fn allocate(device: &wgpu::Device, rows: u32) -> (wgpu::Texture, wgpu::TextureView) {
@@ -271,6 +274,7 @@ impl VisibleSet {
             self.generation += 1;
         }
         self.len = ids.len();
+        self.revision += 1;
         if ids.is_empty() {
             return;
         }

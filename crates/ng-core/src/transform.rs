@@ -20,6 +20,24 @@ pub struct CoordinateSpaceTransform {
 }
 
 impl CoordinateSpaceTransform {
+    /// `input` → `output` by `transform` (`(rank + 1)²`, column-major).
+    pub fn new(input_space: Arc<CoordinateSpace>, output_space: Arc<CoordinateSpace>, transform: Vec<f64>) -> Self {
+        let (rank, source_rank) = (output_space.rank(), input_space.rank());
+        debug_assert_eq!(transform.len(), (rank + 1) * (rank + 1));
+        Self { rank, source_rank, input_space, output_space, transform }
+    }
+
+    /// `space` onto itself by `transform`.
+    pub fn over(space: Arc<CoordinateSpace>, transform: Vec<f64>) -> Self {
+        Self::new(space.clone(), space, transform)
+    }
+
+    /// The identity on `space`.
+    pub fn identity(space: Arc<CoordinateSpace>) -> Self {
+        let n = space.rank() + 1;
+        Self::over(space, crate::matrix::identity(n, n))
+    }
+
     /// `normalizeCoordinateSpaceTransform`: the output space's bounding boxes
     /// are the input space's, through the transform.
     pub fn normalized(mut self) -> Self {

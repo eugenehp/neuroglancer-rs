@@ -14,6 +14,8 @@ pub enum DecodeJob {
     Png { area: usize, channels: usize, bytes_per_sample: usize },
     /// [`crate::chunk::decode_compressed_segmentation`].
     CompressedSegmentation { size: [u32; 4], block: [u32; 3], uint64: bool },
+    /// gzip (a sharded file's chunks and minishard indexes).
+    Gzip,
 }
 
 impl DecodeJob {
@@ -23,6 +25,12 @@ impl DecodeJob {
             DecodeJob::Jpeg { area, channels } => crate::chunk::decode_jpeg(data, area, channels),
             DecodeJob::Png { area, channels, bytes_per_sample } => crate::chunk::decode_png(data, area, channels, bytes_per_sample),
             DecodeJob::CompressedSegmentation { size, block, uint64 } => crate::chunk::decode_compressed_segmentation(data, size, block, uint64),
+            DecodeJob::Gzip => {
+                use std::io::Read;
+                let mut out = vec![];
+                flate2::read::GzDecoder::new(data).read_to_end(&mut out).map_err(|e| anyhow::anyhow!("gzip decoding failed: {e}"))?;
+                Ok(out)
+            }
         }
     }
 
@@ -34,6 +42,7 @@ impl DecodeJob {
             DecodeJob::CompressedSegmentation { size, block, uint64 } => {
                 vec![2, size[0], size[1], size[2], size[3], block[0], block[1], block[2], uint64 as u32]
             }
+            DecodeJob::Gzip => vec![3],
         }
     }
 
@@ -42,6 +51,7 @@ impl DecodeJob {
             [0, area, channels] => DecodeJob::Jpeg { area: *area as usize, channels: *channels as usize },
             [1, area, channels, bytes] => DecodeJob::Png { area: *area as usize, channels: *channels as usize, bytes_per_sample: *bytes as usize },
             [2, s0, s1, s2, s3, b0, b1, b2, u] => DecodeJob::CompressedSegmentation { size: [*s0, *s1, *s2, *s3], block: [*b0, *b1, *b2], uint64: *u != 0 },
+            [3] => DecodeJob::Gzip,
             _ => bail!("not a decode job: {w:?}"),
         })
     }

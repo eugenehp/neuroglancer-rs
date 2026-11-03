@@ -30,11 +30,31 @@ pub struct MeshData {
     /// the render scale histogram counts them).
     pub fragments: u32,
     pub fragments_loaded: u32,
+    /// Only a sample of the vertices kept ([`slim`](Self::slim)): the mesh
+    /// itself is on the GPU.
+    pub slim: bool,
 }
 
 impl MeshData {
     pub fn bytes(&self) -> usize {
         self.positions.len() * 4 + self.indices.len() * 4 + self.normals.len() * 2
+    }
+
+    /// What stays in memory once the mesh is on the GPU: about `max_points`
+    /// of its vertices, evenly kept (where it is, what a host samples it
+    /// for), no triangles or normals. A few hundred single-resolution
+    /// neurons (BANC's, ~3 MB each) otherwise hold gigabytes twice over.
+    pub fn slim(&self, max_points: usize) -> MeshData {
+        let n = self.positions.len() / 3;
+        let step = n.div_ceil(max_points.max(1)).max(1);
+        MeshData {
+            positions: self.positions.chunks_exact(3).step_by(step).flatten().copied().collect(),
+            indices: vec![],
+            normals: vec![],
+            fragments: self.fragments,
+            fragments_loaded: self.fragments_loaded,
+            slim: true,
+        }
     }
 }
 
@@ -154,6 +174,16 @@ pub async fn load(source: &MeshSource, id: u64) -> Result<MeshData> {
 
 #[cfg(test)]
 mod tests {
+
+    #[test]
+    fn a_slim_mesh_keeps_a_sample_of_its_vertices() {
+        let m = MeshData { positions: (0..3000).map(|v| v as f32).collect(), indices: vec![0, 1, 2], normals: vec![[0, 0]; 1000], fragments: 2, fragments_loaded: 2, slim: false };
+        let s = m.slim(100);
+        assert!(s.slim && s.indices.is_empty() && s.normals.is_empty());
+        assert_eq!(s.positions.len(), 300);
+        assert_eq!(&s.positions[3..6], &[30.0, 31.0, 32.0], "every tenth vertex, whole");
+        assert_eq!((s.fragments, s.fragments_loaded), (2, 2));
+    }
     use super::*;
 
     #[test]

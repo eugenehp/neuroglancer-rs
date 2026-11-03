@@ -9,12 +9,9 @@ use ng_core::transform::{legacy_transform_spec, CoordinateSpaceTransform, Transf
 use ng_core::CoordinateSpace;
 use serde_json::{json, Value};
 
-fn nums(v: &Value) -> Vec<f64> {
-    v.as_array().unwrap().iter().map(|x| x.as_f64().unwrap()).collect()
-}
-fn strs(v: &Value) -> Vec<String> {
-    v.as_array().unwrap().iter().map(|x| x.as_str().unwrap().to_owned()).collect()
-}
+mod common;
+use common::{nums, strs};
+
 fn norm(v: &Value) -> Value {
     match v {
         Value::Number(n) => json!(n.as_f64().unwrap()),

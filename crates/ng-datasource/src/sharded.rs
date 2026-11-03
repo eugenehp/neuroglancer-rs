@@ -9,7 +9,6 @@
 //! for its chunks, delta-encoded.
 
 use std::collections::HashMap;
-use std::io::Read;
 use std::sync::{Arc, Mutex, OnceLock};
 
 use anyhow::{bail, ensure, Context, Result};
@@ -166,14 +165,12 @@ fn cache() -> &'static MinishardCache {
     CACHE.get_or_init(Default::default)
 }
 
-fn decode(data: Vec<u8>, encoding: DataEncoding) -> Result<Vec<u8>> {
+/// A sharded file's gzip through the decode jobs ([`crate::decode::decode`]):
+/// off the render thread where the host has given it workers.
+async fn decode(data: Vec<u8>, encoding: DataEncoding) -> Result<Vec<u8>> {
     match encoding {
         DataEncoding::Raw => Ok(data),
-        DataEncoding::Gzip => {
-            let mut out = vec![];
-            flate2::read::GzDecoder::new(&data[..]).read_to_end(&mut out).context("gzip decoding failed")?;
-            Ok(out)
-        }
+        DataEncoding::Gzip => crate::decode::decode(crate::decode::DecodeJob::Gzip, data).await.context("gzip decoding failed"),
     }
 }
 
@@ -269,7 +266,7 @@ async fn read_minishard_index(
             .read(&shard_path, ByteRange::Range { offset: start, length: end - start })
             .await?
             .with_context(|| format!("{}{shard_path} not found", location.url()))?;
-        let raw = decode(raw, sharding.minishard_index_encoding)?;
+        let raw = decode(raw, sharding.minishard_index_encoding).await?;
         if raw.len() % 24 != 0 {
             bail!("Invalid minishard index length: {}", raw.len());
         }
@@ -330,7 +327,7 @@ pub async fn read_with_shard_info(location: &KvStoreLocation, sharding: &Shardin
         .await?
         .with_context(|| format!("{}{} not found", location.url(), index.shard_path))?;
     let info = ShardInfo { shard_path: index.shard_path.clone(), offset: start };
-    Ok(Some((decode(data, sharding.data_encoding)?, info)))
+    Ok(Some((decode(data, sharding.data_encoding).await?, info)))
 }
 
 #[cfg(all(test, not(target_arch = "wasm32")))]

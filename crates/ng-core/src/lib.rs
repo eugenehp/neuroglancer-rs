@@ -17,5 +17,5 @@ pub mod si_units;
 pub mod transform;
 
 pub use coordinate_space::{CoordinateArray, CoordinateSpace, DimensionId};
-pub use data_type::DataType;
+pub use data_type::{DataType, Scalar};
 pub use segment_color::SegmentColorHash;

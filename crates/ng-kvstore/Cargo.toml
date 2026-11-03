@@ -24,4 +24,4 @@ ureq = "2"
 wasm-bindgen.workspace = true
 wasm-bindgen-futures.workspace = true
 js-sys = "0.3"
-web-sys = { workspace = true, features = ["Window", "WorkerGlobalScope", "Request", "RequestInit", "Response", "Headers", "CacheStorage", "Cache"] }
+web-sys = { workspace = true, features = ["Window", "WorkerGlobalScope", "Request", "RequestInit", "Response", "Headers", "CacheStorage", "Cache", "AbortController", "AbortSignal"] }

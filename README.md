@@ -330,17 +330,34 @@ three changes:
   host's world to physical metres of the displayed dimensions), so chunks,
   meshes and volume rendering are chosen for that view, and the planes are lit
   from it;
-- nothing is composited into a layout or UI.
+- nothing is composited into a layout or UI, and the slices' overlays
+  (annotations, axis lines, scale bar), which only show in a layout, are not
+  drawn.
+
+The slices are drawn again only when what they show changes (position, scale,
+a chunk arriving, a shader or segment set), so a host camera orbiting them
+costs only the 3D panel (`slice_redraws()` counts the redraws).
 
 ```rust
 use ng_viewer::scene::{HostCamera, SceneView};
+use ng_viewer::{SceneObjects, Viewer};
 
-viewer.render_scene(SceneView { width, height, slice_size: 1024, camera: HostCamera { view, projection, physical_from_world } });
-let out = viewer.scene_output().unwrap();
-// out.color: Rgba8Unorm, premultiplied; out.depth: Depth32Float, bindable;
-// both upside down (sample at (u, 1 − v)). The depth is the window depth of
-// the host's projection, so it compares directly with the host's own.
+let mut viewer = Viewer::new_scene(device, queue, executor, wake, SceneObjects::default());
+// `projection` with WebGPU's depth range (0..1); `HostCamera { .. }` takes a GL one
+let camera = HostCamera::webgpu(view, projection, physical_from_world);
+// `bounds` (host world centre, radius): near/far fitted to it, for volume rendering
+viewer.render_scene(SceneView { width, height, slice_size: 1024, camera, bounds: Some((centre, radius)) });
+// drawn over the host's frame where nearer than its depth (or `on_top`)
+viewer.composite_scene(&frame_view, frame_format, &host_depth_view, samples, false);
+// or read it yourself: `scene_output()` — Rgba8Unorm premultiplied and
+// Depth32Float, both upside down; `scene_depth_ranges()` the near/far used
 ```
+
+`SceneObjects` tunes segments' objects for many neurons: skeletons thinned to
+a shared edge budget, meshes coarsened or capped past a count, or skeletons
+left to the host (`skeletons_drawn: false`, then
+`scene_segment_skeleton_into` gives each in the host's frame as float32, and
+`scene_segments_revision()` says when anything a host batches changed).
 
 Navigation (where the slices cut, the cross-section scale), layers and
 shaders stay the viewer's, set through its state. Two calls help a host's own
@@ -350,17 +367,29 @@ input:
   of view, and each layer's value there. That's what a hover or click on the
   slices means, since a host's own surfaces are hit first.
 - `scene_position` / `scene_set_position`: where the cross-sections cross,
-  physical metres.
+  physical metres;
+- `toggle_segment` / `segment_visible`: a segment shown or hidden (its mesh
+  in 3D), as a double-click does in the UI;
+- `layer_index(name)`, `layer_progress()` (chunks wanted / ready /
+  downloading / failed per layer), `ManagedLayer::live_settings()` (what
+  `set_layer_option` changes in place), `set_zoom_gate(layer, max)` (a layer
+  shown only at that cross-section scale or finer; `spec.visible` stays the
+  reader's);
+- `adaptive_downloads = Some(ng_chunk::Adaptive::new(start, min, max))`:
+  the downloads at once tuned as they download, backing off when the server
+  pushes back (`retried()`).
 
 Volume rendering works from the host's camera too. It samples the
-projection's whole near..far range, so give it a near/far fitted to the data
-(and convert the depth back when compositing) rather than a scene's 1..5000. Without the UI, an embedder
+projection's whole near..far range, which `SceneView::bounds` fits to the
+data (`composite_scene` converts the depth back). Without the UI, an embedder
 uses `ng_viewer::host::Loader` for what `Engine` does in the background:
 restore a state, fetch its sources, hand them over in `poll`. The `neuroglancer`
 crate's `Engine` uses the same `Loader`.
 
 `crates/ng-viewer/tests/scene.rs` checks it on the GPU: the cross-section lands
-at the host camera's projected depth (anisotropic voxels included).
+at the host camera's projected depth (anisotropic voxels included), a moving
+camera redraws no slice and comes back to the same pixels, and the composite
+hides behind a nearer host surface.
 
 **Data handed over directly.** `ng_kvstore::memory().insert(name, bytes)` puts
 bytes at `memory://<name>`, a location like any other:
